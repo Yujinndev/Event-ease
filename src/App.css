@@ -4,3 +4,52 @@
   padding: 2rem;
   text-align: center;
 }
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  flex-direction: column;
+  font-size: 20px;
+  position: relative;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  padding: 1.5rem;
+  display: flex;
+  background-color: white;
+  justify-content: space-around;
+  align-items: center;
+  height: 5rem;
+  z-index: 1;
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: 700;
+  font: 700 20px "Rowdies", sans-serif;
+}
+
+.hero-container {
+  display: flex;
+  gap: 2px;
+  justify-content: space-between;
+  flex: 1 0 3rem;
+}
+
+.item {
+  width: 50%;
+  border: 1px solid red;
+}
