@@ -1,25 +1,19 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  min-width: 320px;
+  min-height: 100vh;
   text-align: center;
-}
-
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-body {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(245, 245, 245);
-  flex-direction: column;
-  font-size: 20px;
-  position: relative;
+  font:
+    300 20px "Work Sans",
+    sans-serif;
+  background-color: rgb(240, 240, 240);
+}
+
+body {
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 header {
@@ -27,29 +21,25 @@ header {
   top: 0;
   left: 0;
   width: 100vw;
-  padding: 1.5rem;
+  padding: 0.25rem 1rem;
   display: flex;
-  background-color: white;
   justify-content: space-around;
-  align-items: center;
-  height: 5rem;
-  z-index: 1;
+  background-color: white;
+  z-index: 10;
 }
 
 .brand {
-  font-size: 20px;
-  font-weight: 700;
-  font: 700 20px "Rowdies", sans-serif;
+  font:
+    700 20px "Añejo",
+    sans-serif;
 }
 
-.hero-container {
+.title {
+  letter-spacing: 3px;
+}
+
+.main {
   display: flex;
   gap: 2px;
-  justify-content: space-between;
-  flex: 1 0 3rem;
-}
-
-.item {
-  width: 50%;
-  border: 1px solid red;
+  width: inherit;
 }
