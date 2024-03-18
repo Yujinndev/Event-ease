@@ -1,21 +1,22 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import { motion } from "framer-motion"
 
 function NavLink({ onToggle }) {
   return (
     <>
-      <Button variant="link" asChild>
+      <Button size="sm" variant="link" asChild>
         <Link to="/" onClick={onToggle}>
           Home
         </Link>
       </Button>
-      <Button variant="link" asChild>
-        <Link to="/events" onClick={onToggle}>
+      <Button size="sm" variant="link" asChild>
+        <Link to="/events" className="" onClick={onToggle}>
           Events
         </Link>
       </Button>
-      <Button variant="link" asChild>
+      <Button size="sm" variant="link" asChild>
         <Link to="/finances" onClick={onToggle}>
           Finances
         </Link>
@@ -42,9 +43,9 @@ function Header() {
   }
 
   return (
-    <header className="z-50 flex md:items-center md:justify-between md:px-4">
+    <header className="z-50 flex divide-red-50 md:items-center md:justify-between md:px-4">
       <div className="flex w-screen items-center justify-between py-3 md:w-auto md:px-4">
-        <div className="brand text-xl font-bold text-green-700 lg:text-3xl">
+        <div className="brand text-xl font-bold text-green-700 lg:text-2xl">
           SynchroFission
         </div>
 
@@ -78,14 +79,15 @@ function Header() {
 
         {isAuth === false && (
           <Button
-            className="mx-4 block px-6 md:hidden"
+            size="sm"
+            className="block px-6 md:hidden"
             onClick={() => handleLogin()}
           >
             Sign in
           </Button>
         )}
       </div>
-      {isAuth && (
+      {isAuth === true && (
         <div className="hidden gap-2 md:flex">
           <NavLink onToggle={() => handleToggleMenu()} />
         </div>
@@ -93,34 +95,44 @@ function Header() {
 
       {isAuth === true ? (
         <Button
+          size="sm"
           variant="destructive"
-          className="mx-4 hidden px-6 md:flex"
+          className="mx-3 hidden px-6 md:flex"
           onClick={() => handleLogout()}
         >
           Logout
         </Button>
       ) : (
         <Button
-          className="mx-4 hidden px-6 md:flex"
+          size="sm"
+          className="mx-3 hidden px-6 md:flex"
           onClick={() => handleLogin()}
         >
           Sign in
         </Button>
       )}
-      {isOpen && (
-        <div className="absolute top-[50%] mt-4 flex w-full flex-col items-start gap-4 bg-white p-1 py-4 md:hidden">
+
+      {isOpen === true && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute top-[50%] mt-4 flex w-full flex-col items-start gap-4 divide-red-600 bg-white p-1 py-4 md:hidden"
+        >
           <NavLink onToggle={() => handleToggleMenu()} />
 
           {isAuth === true && (
             <Button
+              size="sm"
               variant="destructive"
-              className="mx-4 px-6"
+              className="mx-3 px-6"
               onClick={() => handleLogout()}
             >
               Logout
             </Button>
           )}
-        </div>
+        </motion.div>
       )}
     </header>
   )
