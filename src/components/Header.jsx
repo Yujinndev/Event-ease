@@ -26,10 +26,19 @@ function NavLink({ onToggle }) {
 
 function Header() {
   const [isOpen, setOpen] = useState(false)
-  const [isAuth, setAuth] = useState(true)
+  const [isAuth, setAuth] = useState(false)
 
   const handleToggleMenu = () => {
     setOpen(!isOpen)
+  }
+
+  const handleLogout = () => {
+    setOpen(false)
+    setAuth(false)
+  }
+
+  const handleLogin = () => {
+    setAuth(true)
   }
 
   return (
@@ -39,7 +48,7 @@ function Header() {
           SynchroFission
         </div>
 
-        {isAuth === true ? (
+        {isAuth === true && (
           <button className="md:hidden" onClick={() => handleToggleMenu()}>
             <svg
               className="h-6 w-6"
@@ -65,8 +74,13 @@ function Header() {
               )}
             </svg>
           </button>
-        ) : (
-          <Button size="sm" className="ms-4 px-6 md:hidden">
+        )}
+
+        {isAuth === false && (
+          <Button
+            className="mx-4 block px-6 md:hidden"
+            onClick={() => handleLogin()}
+          >
             Sign in
           </Button>
         )}
@@ -77,18 +91,35 @@ function Header() {
         </div>
       )}
 
-      <div className="hidden gap-2 md:flex">
-        <Button size="sm" className="mx-4 px-6">
+      {isAuth === true ? (
+        <Button
+          variant="destructive"
+          className="mx-4 hidden px-6 md:flex"
+          onClick={() => handleLogout()}
+        >
+          Logout
+        </Button>
+      ) : (
+        <Button
+          className="mx-4 hidden px-6 md:flex"
+          onClick={() => handleLogin()}
+        >
           Sign in
         </Button>
-      </div>
-      {isAuth && isOpen && (
+      )}
+      {isOpen && (
         <div className="absolute top-[50%] mt-4 flex w-full flex-col items-start gap-4 bg-white p-1 py-4 md:hidden">
           <NavLink onToggle={() => handleToggleMenu()} />
 
-          <Button variant="destructive" className="mx-4 px-6">
-            Logout
-          </Button>
+          {isAuth === true && (
+            <Button
+              variant="destructive"
+              className="mx-4 px-6"
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </Button>
+          )}
         </div>
       )}
     </header>
