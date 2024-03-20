@@ -15,7 +15,7 @@ function Footer() {
         </a>
         <ul
           role="list"
-          className="mt-12 flex flex-wrap items-center justify-center gap-4 py-4 text-gray-600 dark:text-gray-400 sm:gap-8"
+          className="flex flex-wrap items-center justify-center gap-4 py-4 text-gray-600 dark:text-gray-400 sm:gap-8"
         >
           <li role="listitem">
             <a

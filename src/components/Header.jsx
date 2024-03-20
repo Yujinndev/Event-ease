@@ -3,6 +3,15 @@ import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 
+const links = [
+  { id: 1, name: "Home", link: "/#home", protectedAuth: false },
+  { id: 2, name: "Features", link: "/#features", protectedAuth: false },
+  { id: 3, name: "About Us", link: "/#aboutus", protectedAuth: false },
+  { id: 4, name: "Dashboard", link: "/dashboard", protectedAuth: true },
+  { id: 5, name: "Events", link: "/events", protectedAuth: true },
+  { id: 6, name: "Finances", link: "/finances", protectedAuth: true },
+]
+
 function NavLink({ onToggle }) {
   return (
     <>
@@ -43,8 +52,8 @@ function Header() {
   }
 
   return (
-    <header className="min-w-screen z-50 flex border-b-[1px] md:items-center md:justify-between md:px-4">
-      <div className="flex w-screen items-center justify-between py-3 md:w-auto md:px-4">
+    <header className="min-w-screen z-50 flex justify-between border-b-[1px] md:items-center md:px-4 lg:justify-around lg:px-0">
+      <div className="flex w-screen items-center justify-between py-3 md:w-auto md:px-4 lg:justify-around">
         <div className="brand text-xl font-bold text-green-700 lg:text-2xl">
           Event Ease
         </div>
@@ -87,11 +96,27 @@ function Header() {
           </Button>
         )}
       </div>
-      {isAuth === true && (
-        <div className="hidden gap-2 md:flex">
-          <NavLink onToggle={() => handleToggleMenu()} />
-        </div>
-      )}
+      <div className="hidden gap-2 md:flex">
+        {isAuth
+          ? links
+              .filter((link) => link.protectedAuth === true)
+              .map((filtered) => (
+                <Button size="sm" variant="link" asChild>
+                  <Link to={filtered.link} onClick={handleToggleMenu}>
+                    {filtered.name}
+                  </Link>
+                </Button>
+              ))
+          : links
+              .filter((link) => link.protectedAuth === false)
+              .map((filtered) => (
+                <Button key={filtered.link} size="sm" variant="link" asChild>
+                  <Link to={filtered.link} onClick={handleToggleMenu}>
+                    {filtered.name}
+                  </Link>
+                </Button>
+              ))}
+      </div>
 
       {isAuth === true ? (
         <Button

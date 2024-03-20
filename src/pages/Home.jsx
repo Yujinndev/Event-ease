@@ -7,10 +7,7 @@ import {
   FaTimeline,
   FaCalendarDays,
 } from "react-icons/fa6"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Header from "@/components/Header"
-import Footer from "@/components/Footer"
 import FeatureCard from "@/components/FeatureCard"
 
 const features = [
@@ -39,9 +36,7 @@ const features = [
 function Home() {
   return (
     <div className="relative overflow-hidden lg:overflow-auto">
-      <Header />
-
-      <div className="absolute inset-x-0 top-32 lg:hidden">
+      <div className="absolute inset-x-0 top-72 lg:left-32">
         <div
           aria-hidden="true"
           className="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-6xl"
@@ -50,14 +45,14 @@ function Home() {
           <div className="h-72 rounded-full bg-gradient-to-r from-green-400 to-lime-300 blur-3xl dark:from-transparent dark:to-indigo-600"></div>
         </div>
       </div>
-      <div
+      <section
         className="mx-auto mt-4 max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0"
         id="home"
       >
         <div className="relative ml-auto pt-40 xl:pt-36">
           <div className="gap-12 md:flex md:items-center">
             <div className="text-center sm:px-12 md:w-2/3 md:px-0 md:text-left lg:w-1/2">
-              <h1 className="text-5xl font-black dark:text-white md:text-6xl xl:text-7xl">
+              <h1 className="text-5xl font-black dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
                 Making events simple and effortless.
               </h1>
               <div>
@@ -66,14 +61,14 @@ function Home() {
                   detail of your event with ease and precision.
                 </p>
                 <div className="mx-auto mt-12 flex w-72 gap-4  sm:gap-6 md:w-auto md:justify-start">
-                  <Button className="flex-1 rounded-full bg-green-700 transition-all duration-200 ease-linear hover:scale-105">
-                    Try it out
+                  <Button className="flex-1 rounded-full bg-green-700 transition-all duration-300 ease-linear">
+                    Get started
                   </Button>
                   <Button
                     variant="outline"
-                    className="flex-1 rounded-full transition-all duration-200 ease-linear hover:scale-105"
+                    className="flex-1 rounded-full transition-all duration-300 ease-linear"
                   >
-                    Explore
+                    Learn more
                   </Button>
                 </div>
               </div>
@@ -91,10 +86,10 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <div className="relative pt-32 md:pt-44" id="features">
-        <div className="mx-auto max-w-6xl px-6 md:px-12 lg:px-6 xl:px-0">
+        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0">
           <div className="mx-auto md:w-3/5">
             <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
               Shaped to meet your needs
@@ -118,10 +113,10 @@ function Home() {
               <div className="relative flex h-full flex-col items-center justify-center gap-6 p-8 py-12 lg:py-8">
                 <img
                   src={eventLogo}
-                  className="-mt-16 lg:-mt-32"
+                  className="-mt-16 lg:-mt-20"
                   loading="lazy"
                 />
-                <div className="mx-auto -mt-12 px-4 text-center lg:px-8">
+                <div className="mx-auto -mt-14 px-4 text-center lg:px-8">
                   <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                     Event Planning and Management
                   </h2>
@@ -141,8 +136,6 @@ function Home() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   )
 }

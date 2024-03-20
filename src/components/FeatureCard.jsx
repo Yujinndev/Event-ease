@@ -9,10 +9,12 @@ function FeatureCard({ props }) {
         </div>
       </div>
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="text-center text-xl font-semibold text-gray-900 dark:text-white">
           {props.name}
         </h2>
-        <p className="mt-3 text-gray-600 dark:text-gray-400">{props.desc}</p>
+        <p className="mt-3 text-center text-gray-600 dark:text-gray-400">
+          {props.desc}
+        </p>
       </div>
     </div>
   )
