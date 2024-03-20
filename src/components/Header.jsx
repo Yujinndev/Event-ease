@@ -43,10 +43,10 @@ function Header() {
   }
 
   return (
-    <header className="z-50 flex divide-red-50 md:items-center md:justify-between md:px-4">
+    <header className="min-w-screen z-50 flex border-b-[1px] md:items-center md:justify-between md:px-4">
       <div className="flex w-screen items-center justify-between py-3 md:w-auto md:px-4">
         <div className="brand text-xl font-bold text-green-700 lg:text-2xl">
-          SynchroFission
+          Event Ease
         </div>
 
         {isAuth === true && (
