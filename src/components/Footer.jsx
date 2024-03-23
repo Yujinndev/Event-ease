@@ -15,7 +15,7 @@ function NavLinks() {
         className="flex flex-wrap items-center justify-center gap-4 py-4 text-gray-600 dark:text-gray-400 sm:gap-8"
       >
         {links.map((item) => (
-          <li role="listitem">
+          <li role="listitem" key={item.id}>
             <Button key={item.id} size="sm" variant="link" asChild>
               <Link to={item.link}>{item.name}</Link>
             </Button>

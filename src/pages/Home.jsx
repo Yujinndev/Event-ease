@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import eventLogo from "@/assets/event-image.png"
 import heroLogo from "@/assets/hero-image.png"
 import {
@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import FeatureCard from "@/components/ui/FeatureCard"
 import FAQ from "@/components/ui/FAQ"
+import axios from "axios"
 
 const features = [
   {
@@ -35,9 +36,29 @@ const features = [
 ]
 
 function Home() {
+  const [faqs, setFaqs] = useState([])
+  const [activeFaq, setActiveFaq] = useState(null)
+
+  const toggleAccordion = (index) => {
+    setActiveFaq((prevIndex) => (prevIndex === index ? null : index))
+  }
+
+  useEffect(() => {
+    const fetchFaqs = async () => {
+      try {
+        const getFaqs = await axios.get("http://localhost:8000/faqs")
+        setFaqs(getFaqs.data)
+      } catch (error) {
+        console.error("Error: ", error)
+      }
+    }
+
+    fetchFaqs()
+  }, [])
+
   return (
     <div className="relative overflow-hidden">
-      <div className="absolute inset-x-0 top-72 lg:left-32">
+      <div className="absolute inset-x-0 top-64 lg:left-24 lg:top-72">
         <div
           aria-hidden="true"
           className="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-7xl"
@@ -106,7 +127,7 @@ function Home() {
               <div className="relative flex h-full flex-col items-center justify-center gap-6 p-8 py-12 lg:py-8">
                 <img
                   src={eventLogo}
-                  className="-mt-16 lg:-mt-20"
+                  className="-mt-16 w-96 md:w-full lg:-mt-20"
                   loading="lazy"
                 />
                 <div className="mx-auto -mt-14 px-4 text-center lg:px-8">
@@ -121,8 +142,8 @@ function Home() {
                 </div>
               </div>
               <div className="relative grid grid-rows-2 overflow-hidden rounded-[1.25rem] bg-gray-100 p-1 dark:bg-gray-800/50 sm:grid-cols-2">
-                {features.map((item) => {
-                  return <FeatureCard key={item.name} props={item} />
+                {features.map((item, index) => {
+                  return <FeatureCard key={index} props={item} />
                 })}
               </div>
             </div>
@@ -136,16 +157,15 @@ function Home() {
             <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
               More about us
             </h2>
-            <p className="mt-4 text-center text-[18px] text-gray-600 dark:text-gray-300">
+            <p className="mt-4 text-center text-[16px] text-gray-600 dark:text-gray-300 md:text-xl">
               Event Ease is developed by Synchro Fission, a startup duo
-              passionate in building innovative solutions. We are dedicated to
-              creating user-friendly and feature-rich applications like
-              EventEase to empower users in their adulting phase.
+              passionate in building innovative solutions like EventEase to
+              empower users in their adulting phase.
             </p>
           </div>
           <div className="mt-12 md:mt-16"></div>
           <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0">
-            <div className="mt-20 flex flex-col gap-12 md:mt-32 lg:flex-row">
+            <div className="mt-12 flex flex-col gap-12 md:mt-24 lg:flex-row">
               <div className="text-center lg:w-5/12 lg:pl-12 lg:text-left">
                 <h2 className="text-xl font-bold text-gray-800 dark:text-white md:text-3xl lg:text-4xl">
                   Frequently Asked Questions
@@ -155,13 +175,15 @@ function Home() {
                 </p>
               </div>
               <div className="divide-y divide-gray-200 border-y border-gray-200 dark:divide-gray-800 dark:border-gray-800 lg:w-7/12">
-                {/* faqItems */}
-                <FAQ
-                  question={"Hello"}
-                  answer={
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-                  }
-                />
+                {faqs.map((item, index) => (
+                  <FAQ
+                    key={index}
+                    question={item.question}
+                    answer={item.answer}
+                    isActive={index === activeFaq}
+                    toggleAccordion={() => toggleAccordion(index)}
+                  />
+                ))}
               </div>
             </div>
           </div>

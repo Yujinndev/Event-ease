@@ -7,8 +7,8 @@
     },
     {
       "id": 2,
-      "question": "What features does EventEase offer?",
-      "answer": "EventEase offers budget tracking, task assignment, vendor communication, and analytics, enabling detailed event planning and data-driven decision-making."
+      "question": "Is it free?",
+      "answer": "Yes, it will be free for the moment, because the server can accomodate users up to 100."
     },
     {
       "id": 3,

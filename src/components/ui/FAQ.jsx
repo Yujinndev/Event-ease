@@ -1,14 +1,7 @@
-import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 
-function FAQ({ question, answer }) {
-  const [isActive, setIsActive] = useState(false)
-
-  const toggleAccordion = () => {
-    setIsActive(!isActive)
-  }
-
+function FAQ({ question, answer, isActive, toggleAccordion }) {
   return (
     <div className="faq mx-auto max-w-2xl">
       <div className="text-lg">
@@ -46,7 +39,7 @@ function FAQ({ question, answer }) {
         <motion.div
           variants={{
             hidden: { opacity: 0, y: -15, maxHeight: 0 },
-            visible: { opacity: 1, y: 0, maxHeight: 100 },
+            visible: { opacity: 1, y: 0, maxHeight: "100%" },
           }}
           initial="hidden"
           animate="visible"
