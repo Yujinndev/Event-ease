@@ -4,19 +4,19 @@ import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 
 const links = [
-  { id: 1, name: "Home", link: "/#home", protectedAuth: false },
-  { id: 2, name: "Features", link: "/#features", protectedAuth: false },
-  { id: 3, name: "About Us", link: "/#aboutUs", protectedAuth: false },
-  { id: 4, name: "Dashboard", link: "/dashboard", protectedAuth: true },
-  { id: 5, name: "Events", link: "/events", protectedAuth: true },
-  { id: 6, name: "Finances", link: "/finances", protectedAuth: true },
+  { id: 1, name: "Home", link: "/#home", protectedRoute: false },
+  { id: 2, name: "Features", link: "/#features", protectedRoute: false },
+  { id: 3, name: "About Us", link: "/#aboutUs", protectedRoute: false },
+  { id: 4, name: "Dashboard", link: "/dashboard", protectedRoute: true },
+  { id: 5, name: "Events", link: "/events", protectedRoute: true },
+  { id: 6, name: "Finances", link: "/finances", protectedRoute: true },
 ]
 
 function NavLinks({ onToggle, isProtected }) {
   return (
     <>
       {links
-        .filter((link) => link.protectedAuth === isProtected)
+        .filter((link) => link.protectedRoute === isProtected)
         .map((filtered) => (
           <Button key={filtered.id} size="sm" variant="link" asChild>
             <Link to={filtered.link} onClick={onToggle}>
@@ -28,24 +28,19 @@ function NavLinks({ onToggle, isProtected }) {
   )
 }
 
-function NavActions({ onLogin, onLogout, isProtected }) {
+function NavActions({ isProtected }) {
   return (
     <>
       {isProtected ? (
         <div className="flex items-center gap-2">
           <p>Hello</p>
-          <Button
-            size="sm"
-            variant="destructive"
-            className="mx-3 px-6"
-            onClick={onLogout}
-          >
+          <Button size="sm" variant="destructive" className="mx-3 px-6">
             Logout
           </Button>
         </div>
       ) : (
-        <Button size="sm" className="mx-3 px-6" onClick={onLogin}>
-          Sign in
+        <Button size="sm" className="mx-3 px-6" asChild>
+          <Link to="/signin">Sign in</Link>
         </Button>
       )}
     </>
@@ -58,16 +53,6 @@ function Header() {
 
   const handleToggleMenu = () => {
     setMenuOpen(!isMenuOpen)
-  }
-
-  const handleLogout = () => {
-    setMenuOpen(false)
-    setLoggedin(false)
-  }
-
-  const handleLogin = () => {
-    setMenuOpen(false)
-    setLoggedin(true)
   }
 
   return (
@@ -111,11 +96,7 @@ function Header() {
       </div>
 
       <div className="hidden gap-2 md:flex">
-        <NavActions
-          onLogin={() => handleLogin()}
-          onLogout={() => handleLogout()}
-          isProtected={isLoggedin ? true : false}
-        />
+        <NavActions isProtected={isLoggedin ? true : false} />
       </div>
 
       {isMenuOpen === true && (
@@ -130,11 +111,7 @@ function Header() {
             onToggle={() => handleToggleMenu()}
             isProtected={isLoggedin ? true : false}
           />
-          <NavActions
-            onLogin={() => handleLogin()}
-            onLogout={() => handleLogout()}
-            isProtected={isLoggedin ? true : false}
-          />
+          <NavActions isProtected={isLoggedin ? true : false} />
         </motion.div>
       )}
     </header>

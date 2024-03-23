@@ -8,7 +8,7 @@
 }
 
 body {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -28,14 +28,4 @@ header {
   font:
     700 20px "Añejo",
     sans-serif;
-}
-
-.title {
-  letter-spacing: 3px;
-}
-
-.main {
-  display: flex;
-  gap: 2px;
-  width: inherit;
 }
