@@ -1,0 +1,19 @@
+{
+  "faqs": [
+    {
+      "id": 1,
+      "question": "What is EventEase?",
+      "answer": "EventEase simplifies event planning with customizable templates and collaboration tools, making tasks like guest management and budget tracking efficient."
+    },
+    {
+      "id": 2,
+      "question": "What features does EventEase offer?",
+      "answer": "EventEase offers budget tracking, task assignment, vendor communication, and analytics, enabling detailed event planning and data-driven decision-making."
+    },
+    {
+      "id": 3,
+      "question": "How can EventEase benefit me?",
+      "answer": "EventEase saves time, increases efficiency, and improves event outcomes through intuitive features, empowering seamless event management and execution."
+    }
+  ]
+}
