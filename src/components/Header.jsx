@@ -6,49 +6,68 @@ import { motion } from "framer-motion"
 const links = [
   { id: 1, name: "Home", link: "/#home", protectedAuth: false },
   { id: 2, name: "Features", link: "/#features", protectedAuth: false },
-  { id: 3, name: "About Us", link: "/#aboutus", protectedAuth: false },
+  { id: 3, name: "About Us", link: "/#aboutUs", protectedAuth: false },
   { id: 4, name: "Dashboard", link: "/dashboard", protectedAuth: true },
   { id: 5, name: "Events", link: "/events", protectedAuth: true },
   { id: 6, name: "Finances", link: "/finances", protectedAuth: true },
 ]
 
-function NavLink({ onToggle }) {
+function NavLinks({ onToggle, isProtected }) {
   return (
     <>
-      <Button size="sm" variant="link" asChild>
-        <Link to="/" onClick={onToggle}>
-          Home
-        </Link>
-      </Button>
-      <Button size="sm" variant="link" asChild>
-        <Link to="/events" className="" onClick={onToggle}>
-          Events
-        </Link>
-      </Button>
-      <Button size="sm" variant="link" asChild>
-        <Link to="/finances" onClick={onToggle}>
-          Finances
-        </Link>
-      </Button>
+      {links
+        .filter((link) => link.protectedAuth === isProtected)
+        .map((filtered) => (
+          <Button key={filtered.id} size="sm" variant="link" asChild>
+            <Link to={filtered.link} onClick={onToggle}>
+              {filtered.name}
+            </Link>
+          </Button>
+        ))}
+    </>
+  )
+}
+
+function NavActions({ onLogin, onLogout, isProtected }) {
+  return (
+    <>
+      {isProtected ? (
+        <div className="flex items-center gap-2">
+          <p>Hello</p>
+          <Button
+            size="sm"
+            variant="destructive"
+            className="mx-3 px-6"
+            onClick={onLogout}
+          >
+            Logout
+          </Button>
+        </div>
+      ) : (
+        <Button size="sm" className="mx-3 px-6" onClick={onLogin}>
+          Sign in
+        </Button>
+      )}
     </>
   )
 }
 
 function Header() {
-  const [isOpen, setOpen] = useState(false)
-  const [isAuth, setAuth] = useState(false)
+  const [isMenuOpen, setMenuOpen] = useState(false)
+  const [isLoggedin, setLoggedin] = useState(false)
 
   const handleToggleMenu = () => {
-    setOpen(!isOpen)
+    setMenuOpen(!isMenuOpen)
   }
 
   const handleLogout = () => {
-    setOpen(false)
-    setAuth(false)
+    setMenuOpen(false)
+    setLoggedin(false)
   }
 
   const handleLogin = () => {
-    setAuth(true)
+    setMenuOpen(false)
+    setLoggedin(true)
   }
 
   return (
@@ -58,105 +77,64 @@ function Header() {
           Event Ease
         </div>
 
-        {isAuth === true && (
-          <button className="md:hidden" onClick={() => handleToggleMenu()}>
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {!isOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                ></path>
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
-              )}
-            </svg>
-          </button>
-        )}
-
-        {isAuth === false && (
-          <Button
-            size="sm"
-            className="block px-6 md:hidden"
-            onClick={() => handleLogin()}
+        <button className="md:hidden" onClick={() => handleToggleMenu()}>
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            Sign in
-          </Button>
-        )}
+            {!isMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            )}
+          </svg>
+        </button>
       </div>
       <div className="hidden gap-2 md:flex">
-        {isAuth
-          ? links
-              .filter((link) => link.protectedAuth === true)
-              .map((filtered) => (
-                <Button size="sm" variant="link" asChild>
-                  <Link to={filtered.link} onClick={handleToggleMenu}>
-                    {filtered.name}
-                  </Link>
-                </Button>
-              ))
-          : links
-              .filter((link) => link.protectedAuth === false)
-              .map((filtered) => (
-                <Button key={filtered.link} size="sm" variant="link" asChild>
-                  <Link to={filtered.link} onClick={handleToggleMenu}>
-                    {filtered.name}
-                  </Link>
-                </Button>
-              ))}
+        <NavLinks
+          onToggle={() => handleToggleMenu()}
+          isProtected={isLoggedin ? true : false}
+        />
       </div>
 
-      {isAuth === true ? (
-        <Button
-          size="sm"
-          variant="destructive"
-          className="mx-3 hidden px-6 md:flex"
-          onClick={() => handleLogout()}
-        >
-          Logout
-        </Button>
-      ) : (
-        <Button
-          size="sm"
-          className="mx-3 hidden px-6 md:flex"
-          onClick={() => handleLogin()}
-        >
-          Sign in
-        </Button>
-      )}
+      <div className="hidden gap-2 md:flex">
+        <NavActions
+          onLogin={() => handleLogin()}
+          onLogout={() => handleLogout()}
+          isProtected={isLoggedin ? true : false}
+        />
+      </div>
 
-      {isOpen === true && (
+      {isMenuOpen === true && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="absolute top-[50%] mt-4 flex w-full flex-col items-start gap-4 divide-red-600 bg-white p-1 py-4 md:hidden"
+          className="absolute inset-x-0 inset-y-10 mt-4 flex h-52 w-full flex-col items-start gap-4 divide-red-600 bg-white p-1 py-4 md:hidden"
         >
-          <NavLink onToggle={() => handleToggleMenu()} />
-
-          {isAuth === true && (
-            <Button
-              size="sm"
-              variant="destructive"
-              className="mx-3 px-6"
-              onClick={() => handleLogout()}
-            >
-              Logout
-            </Button>
-          )}
+          <NavLinks
+            onToggle={() => handleToggleMenu()}
+            isProtected={isLoggedin ? true : false}
+          />
+          <NavActions
+            onLogin={() => handleLogin()}
+            onLogout={() => handleLogout()}
+            isProtected={isLoggedin ? true : false}
+          />
         </motion.div>
       )}
     </header>

@@ -1,4 +1,4 @@
-import React from "react"
+import { useState } from "react"
 import eventLogo from "@/assets/event-image.png"
 import heroLogo from "@/assets/hero-image.png"
 import {
@@ -8,7 +8,8 @@ import {
   FaCalendarDays,
 } from "react-icons/fa6"
 import { Button } from "@/components/ui/button"
-import FeatureCard from "@/components/FeatureCard"
+import FeatureCard from "@/components/ui/FeatureCard"
+import FAQ from "@/components/ui/FAQ"
 
 const features = [
   {
@@ -35,16 +36,17 @@ const features = [
 
 function Home() {
   return (
-    <div className="relative overflow-hidden lg:overflow-auto">
+    <div className="relative overflow-hidden">
       <div className="absolute inset-x-0 top-72 lg:left-32">
         <div
           aria-hidden="true"
-          className="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-6xl"
+          className="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-7xl"
         >
-          <div className="h-60 bg-gradient-to-br from-primary to-purple-400 blur-3xl dark:from-blue-700"></div>
+          <div className="h-60 bg-gradient-to-br from-purple-400 to-indigo-300 blur-3xl dark:from-blue-700"></div>
           <div className="h-72 rounded-full bg-gradient-to-r from-green-400 to-lime-300 blur-3xl dark:from-transparent dark:to-indigo-600"></div>
         </div>
       </div>
+
       <section
         className="mx-auto mt-4 max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0"
         id="home"
@@ -88,7 +90,7 @@ function Home() {
         </div>
       </section>
 
-      <div className="relative pt-32 md:pt-44" id="features">
+      <section className="relative pt-32 md:pt-44" id="features">
         <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0">
           <div className="mx-auto md:w-3/5">
             <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
@@ -101,15 +103,6 @@ function Home() {
           </div>
           <div className="mt-16 md:mt-20">
             <div className="relative grid rounded-3xl border border-gray-200 p-1 dark:border-gray-800 lg:grid-cols-2">
-              <div className="absolute inset-0 hidden h-max dark:block lg:my-auto">
-                <div
-                  aria-hidden="true"
-                  className="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-70 2xl:mx-auto 2xl:max-w-6xl"
-                >
-                  <div className="h-60 bg-gradient-to-br from-primary to-purple-400 blur-3xl dark:from-blue-700"></div>
-                  <div className="h-72 rounded-full bg-gradient-to-r from-cyan-400 to-sky-300 blur-3xl dark:from-transparent dark:to-indigo-600"></div>
-                </div>
-              </div>
               <div className="relative flex h-full flex-col items-center justify-center gap-6 p-8 py-12 lg:py-8">
                 <img
                   src={eventLogo}
@@ -135,7 +128,45 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <section className="relative overflow-hidden pt-32 md:pt-44" id="aboutUs">
+        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0">
+          <div className="mx-auto md:w-3/5">
+            <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
+              More about us
+            </h2>
+            <p className="mt-4 text-center text-[18px] text-gray-600 dark:text-gray-300">
+              Event Ease is developed by Synchro Fission, a startup duo
+              passionate in building innovative solutions. We are dedicated to
+              creating user-friendly and feature-rich applications like
+              EventEase to empower users in their adulting phase.
+            </p>
+          </div>
+          <div className="mt-12 md:mt-16"></div>
+          <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0">
+            <div className="mt-20 flex flex-col gap-12 md:mt-32 lg:flex-row">
+              <div className="text-center lg:w-5/12 lg:pl-12 lg:text-left">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white md:text-3xl lg:text-4xl">
+                  Frequently Asked Questions
+                </h2>
+                <p className="mt-4 text-[18px] text-gray-600 dark:text-gray-300">
+                  Learn More About Event Ease ..
+                </p>
+              </div>
+              <div className="divide-y divide-gray-200 border-y border-gray-200 dark:divide-gray-800 dark:border-gray-800 lg:w-7/12">
+                {/* faqItems */}
+                <FAQ
+                  question={"Hello"}
+                  answer={
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
