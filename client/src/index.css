@@ -74,3 +74,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer base {
+  .container {
+    @apply min-h-screen min-w-full;
+  }
+}

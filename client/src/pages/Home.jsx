@@ -1,38 +1,38 @@
-import { useEffect, useState } from "react"
-import eventLogo from "@/assets/event-image.png"
-import heroLogo from "@/assets/hero-image.png"
+import { useEffect, useState } from 'react'
+import eventLogo from '@/assets/event-image.png'
+import heroLogo from '@/assets/hero-image.png'
 import {
   FaEnvelopeCircleCheck,
   FaMoneyBills,
   FaTimeline,
   FaCalendarDays,
-} from "react-icons/fa6"
-import { Button } from "@/components/ui/button"
-import FeatureCard from "@/components/ui/FeatureCard"
-import FAQ from "@/components/ui/FAQ"
-import axios from "axios"
-import Header from "@/components/Header"
-import Footer from "@/components/Footer"
+} from 'react-icons/fa6'
+import { Button } from '@/components/ui/button'
+import FeatureCard from '@/components/ui/FeatureCard'
+import FAQ from '@/components/ui/FAQ'
+import axios from 'axios'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 const features = [
   {
-    name: "Finance Tracker and Analysis",
-    desc: "Suggest date ideas and venues that align with the specified budget.",
+    name: 'Finance Tracker and Analysis',
+    desc: 'Suggest date ideas and venues that align with the specified budget.',
     icon: <FaMoneyBills />,
   },
   {
-    name: "Guest Email Invitation",
-    desc: "Invite guests in a modernized manner. Users can effortlessly manage RSVPs.",
+    name: 'Guest Email Invitation',
+    desc: 'Invite guests in a modernized manner. Users can effortlessly manage RSVPs.',
     icon: <FaEnvelopeCircleCheck />,
   },
   {
-    name: "Timeline and Task Management",
-    desc: "Assist in planning the timeline for the date, from making reservations to organizing surprise elements.",
+    name: 'Timeline and Task Management',
+    desc: 'Assist in planning the timeline for the date, from making reservations to organizing surprise elements.',
     icon: <FaTimeline />,
   },
   {
-    name: "Calendar Integration",
-    desc: "Users can schedule tasks, set reminders, and synchronize event details with their personal calendars.",
+    name: 'Calendar Integration',
+    desc: 'Users can schedule tasks, set reminders, and synchronize event details with their personal calendars.',
     icon: <FaCalendarDays />,
   },
 ]
@@ -48,10 +48,10 @@ function Home() {
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
-        const getFaqs = await axios.get("http://localhost:8000/faqs")
+        const getFaqs = await axios.get('http://localhost:8000/faqs')
         setFaqs(getFaqs.data)
       } catch (error) {
-        console.error("Error: ", error)
+        console.error('Error: ', error)
       }
     }
 
@@ -177,7 +177,7 @@ function Home() {
                     Frequently Asked Questions
                   </h2>
                   <p className="mt-4 text-[18px] text-gray-600 dark:text-gray-300">
-                    Learn More About Event Ease ..
+                    Learn more about Event Ease
                   </p>
                 </div>
                 <div className="divide-y divide-gray-200 border-y border-gray-200 dark:divide-gray-800 dark:border-gray-800 lg:w-7/12">

@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
 
 function FAQ({ question, answer, isActive, toggleAccordion }) {
   return (
@@ -9,15 +9,15 @@ function FAQ({ question, answer, isActive, toggleAccordion }) {
           type="button"
           className="flex w-full items-start justify-between py-6 text-left text-gray-400"
           onClick={toggleAccordion}
-          aria-expanded={isActive ? "true" : "false"}
+          aria-expanded={isActive ? 'true' : 'false'}
         >
           <span className="font-medium text-gray-900 dark:text-white">
             {question}
           </span>
           <span className="ml-6 flex h-7 items-center">
             <svg
-              className={cn("arrow-down h-6 w-6 transform duration-300", {
-                "rotate-180": isActive,
+              className={cn('arrow-down h-6 w-6 transform duration-300', {
+                'rotate-180': isActive,
               })}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -38,12 +38,12 @@ function FAQ({ question, answer, isActive, toggleAccordion }) {
       {isActive && (
         <motion.div
           variants={{
-            hidden: { opacity: 0, y: -15, maxHeight: 0 },
-            visible: { opacity: 1, y: 0, maxHeight: "100%" },
+            hidden: { opacity: 0, y: -10, maxHeight: 0 },
+            visible: { opacity: 1, y: 0, maxHeight: '100%' },
           }}
           initial="hidden"
           animate="visible"
-          transition={{ type: "spring", stiffness: 50 }}
+          transition={{ type: 'spring', stiffness: 50 }}
           className="blockl transform overflow-hidden pr-12 duration-300"
         >
           <div className="pb-4 text-base text-gray-600 dark:text-gray-400">

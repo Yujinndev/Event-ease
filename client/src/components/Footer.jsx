@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 
 const links = [
-  { id: 1, name: "Home", link: "/#home" },
-  { id: 2, name: "Features", link: "/#features" },
-  { id: 3, name: "About Us", link: "/#aboutUs" },
+  { id: 1, name: 'Home', link: '/#home' },
+  { id: 2, name: 'Features', link: '/#features' },
+  { id: 3, name: 'About Us', link: '/#aboutUs' },
 ]
 
 function NavLinks() {

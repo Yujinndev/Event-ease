@@ -1,7 +1,7 @@
-import { useEffect } from "react"
-import { Outlet, useNavigate } from "react-router-dom"
+import { useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 
-import { useAuth } from "./AuthProvider"
+import { useAuth } from './AuthProvider'
 
 export default function ProtectedRoute() {
   const user = useAuth()
@@ -9,7 +9,7 @@ export default function ProtectedRoute() {
 
   useEffect(() => {
     if (user === null) {
-      navigate("/signin", { replace: true })
+      navigate('/signin', { replace: true })
     }
   }, [navigate, user])
 

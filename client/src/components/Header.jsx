@@ -1,15 +1,15 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
-import { motion } from "framer-motion"
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 const links = [
-  { id: 1, name: "Home", link: "/#home", protectedRoute: false },
-  { id: 2, name: "Features", link: "/#features", protectedRoute: false },
-  { id: 3, name: "About Us", link: "/#aboutUs", protectedRoute: false },
-  { id: 4, name: "Dashboard", link: "/dashboard", protectedRoute: true },
-  { id: 5, name: "Events", link: "/events", protectedRoute: true },
-  { id: 6, name: "Finances", link: "/finances", protectedRoute: true },
+  { id: 1, name: 'Home', link: '/#home', protectedRoute: false },
+  { id: 2, name: 'Features', link: '/#features', protectedRoute: false },
+  { id: 3, name: 'About Us', link: '/#aboutUs', protectedRoute: false },
+  { id: 4, name: 'Dashboard', link: '/dashboard', protectedRoute: true },
+  { id: 5, name: 'Events', link: '/events', protectedRoute: true },
+  { id: 6, name: 'Finances', link: '/finances', protectedRoute: true },
 ]
 
 function NavLinks({ onToggle, isProtected }) {

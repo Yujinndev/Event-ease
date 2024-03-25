@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext()
 export default function AuthProvider({ children, isSignedIn }) {
@@ -12,7 +12,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext)
 
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error('useAuth must be used within an AuthProvider')
   }
 
   return context
