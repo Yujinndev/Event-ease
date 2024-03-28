@@ -12,13 +12,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Link } from 'react-router-dom'
+import HeroImg from '@/assets/hero-image.png'
+import { Card } from '@/components/ui/card'
 
 const userSchema = z.object({
   email: z.string().email({
     message: 'Email is invalid',
-  }),
-  username: z.string().min(4, {
-    message: 'Username must contain at least 4 character(s)',
   }),
   password: z.string().min(8, {
     message: 'Password must contain at least 8 character(s)',
@@ -30,7 +30,6 @@ function SignIn() {
     resolver: zodResolver(userSchema),
     defaultValues: {
       email: '',
-      username: '',
       password: '',
     },
   })
@@ -41,60 +40,68 @@ function SignIn() {
   }
 
   return (
-    <section className="relative pt-32 md:pt-44" id="features">
-      <div className="mx-auto max-w-7xl rounded-md border px-6 md:px-12 lg:px-6 xl:px-0">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-8 p-6"
-          >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Markkk" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Mark@event.ease" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="********" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormMessage />
+    <section className="w-full lg:grid lg:grid-cols-2">
+      <div className="flex min-h-screen items-center justify-center p-6 py-12">
+        <Card className="m-auto grid w-[500px] gap-6 px-8 py-4 lg:px-12 lg:py-8">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold">Let's sign in!</h1>
+            <p className="text-balance text-sm text-muted-foreground">
+              Enter your details below to login to your account ..
+            </p>
+          </div>
 
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+              <Button variant="outline" className="w-full">
+                Login with Google
+              </Button>
+            </form>
+          </Form>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{' '}
+            <Link href="#" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </Card>
+      </div>
+      <div className="hidden bg-muted lg:block">
+        <img
+          src={HeroImg}
+          alt="Image"
+          width="1920"
+          height="1080"
+          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
       </div>
     </section>
   )
 }
-
 export default SignIn
