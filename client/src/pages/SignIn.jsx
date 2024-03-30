@@ -6,15 +6,22 @@ import { z } from 'zod'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import HeroImg from '@/assets/hero-image.png'
-import { Card } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import axios from '@/lib/axios'
+import { useEffect } from 'react'
+import useAuthStore from '@/services/state/useAuthStore'
 
 const userSchema = z.object({
   email: z.string().email({
@@ -25,7 +32,14 @@ const userSchema = z.object({
   }),
 })
 
-function SignIn() {
+export default function SignIn() {
+  const navigate = useNavigate()
+  const setAuthLogin = useAuthStore((state) => state.login)
+  const auth = useAuthStore.getState().auth
+  useEffect(() => {
+    if (auth) navigate('/')
+  }, [auth])
+
   const form = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -35,61 +49,87 @@ function SignIn() {
   })
 
   const onSubmit = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log('data:', data)
+    try {
+      const response = await axios.post('/auth/login', {
+        email: data.email,
+        password: data.password,
+      })
+
+      localStorage.setItem('user', JSON.stringify(response.data))
+      setAuthLogin(JSON.stringify(response.data))
+
+      navigate('/dashboard', { replace: true })
+    } catch (error) {
+      const message = error?.response?.data?.error
+      form.setError('root', { message: message })
+    }
   }
 
   return (
     <section className="w-full lg:grid lg:grid-cols-2">
       <div className="flex min-h-screen items-center justify-center p-6 py-12">
-        <Card className="m-auto grid w-[500px] gap-6 px-8 py-4 lg:px-12 lg:py-8">
-          <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Let's sign in!</h1>
-            <p className="text-balance text-sm text-muted-foreground">
+        <Card className="m-auto grid w-full gap-6 lg:w-[550px] lg:px-8 lg:py-4">
+          <CardHeader className="-mb-4">
+            <CardTitle className="text-2xl">Let's sign in!</CardTitle>
+            <CardDescription>
               Enter your details below to login to your account ..
-            </p>
-          </div>
+            </CardDescription>
+          </CardHeader>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="grid gap-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input placeholder="Email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Password"
+                          type="password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {form.formState.errors.root && (
+                  <FormMessage>
+                    {form.formState.errors.root.message}
+                  </FormMessage>
                 )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Password" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-              <Button variant="outline" className="w-full">
-                Login with Google
-              </Button>
-            </form>
-          </Form>
-          <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="#" className="underline">
-              Sign up
-            </Link>
-          </div>
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
+              </form>
+            </Form>
+            <Button variant="outline" className="mt-2 w-full">
+              Login with Google
+            </Button>
+            <div className="mt-4 text-center text-sm">
+              Don&apos;t have an account?{' '}
+              <Link href="#" className="underline">
+                Sign up
+              </Link>
+            </div>
+          </CardContent>
         </Card>
       </div>
       <div className="hidden bg-muted lg:block">
@@ -104,4 +144,3 @@ function SignIn() {
     </section>
   )
 }
-export default SignIn

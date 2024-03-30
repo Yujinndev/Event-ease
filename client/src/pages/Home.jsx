@@ -10,9 +10,9 @@ import {
 import { Button } from '@/components/ui/button'
 import FeatureCard from '@/components/ui/FeatureCard'
 import FAQ from '@/components/ui/FAQ'
-import axios from 'axios'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import useAuthStore from '@/services/state/useAuthStore'
 
 const features = [
   {
@@ -37,26 +37,33 @@ const features = [
   },
 ]
 
+const faqs = [
+  {
+    id: 1,
+    question: 'What is EventEase?',
+    answer:
+      'EventEase simplifies event planning with customizable templates and collaboration tools, making tasks like guest management and budget tracking efficient.',
+  },
+  {
+    id: 2,
+    question: 'Is it free?',
+    answer:
+      'Yes, it will be free for the moment, because the server can accomodate users up to 100.',
+  },
+  {
+    id: 3,
+    question: 'How can EventEase benefit me?',
+    answer:
+      'EventEase saves time, increases efficiency, and improves event outcomes through intuitive features, empowering seamless event management and execution.',
+  },
+]
+
 function Home() {
-  const [faqs, setFaqs] = useState([])
   const [activeFaq, setActiveFaq] = useState(null)
 
   const toggleAccordion = (index) => {
     setActiveFaq((prevIndex) => (prevIndex === index ? null : index))
   }
-
-  useEffect(() => {
-    const fetchFaqs = async () => {
-      try {
-        const getFaqs = await axios.get('http://localhost:8000/faqs')
-        setFaqs(getFaqs.data)
-      } catch (error) {
-        console.error('Error: ', error)
-      }
-    }
-
-    fetchFaqs()
-  }, [])
 
   return (
     <>

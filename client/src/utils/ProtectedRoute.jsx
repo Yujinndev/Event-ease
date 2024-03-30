@@ -1,17 +1,15 @@
-import { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import useAuthStore from '@/services/state/useAuthStore'
+import { useLocation, Navigate, Outlet } from 'react-router-dom'
 
-import { useAuth } from './AuthProvider'
+const ProtectedRoute = () => {
+  const location = useLocation()
+  const auth = useAuthStore.getState().auth
 
-export default function ProtectedRoute() {
-  const user = useAuth()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (user === null) {
-      navigate('/signin', { replace: true })
-    }
-  }, [navigate, user])
-
-  return <Outlet />
+  return auth?.user ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/signin" state={{ from: location }} replace />
+  )
 }
+
+export default ProtectedRoute

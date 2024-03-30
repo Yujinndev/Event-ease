@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import useAuthStore from '@/services/state/useAuthStore'
 
 const links = [
   { id: 1, name: 'Home', link: '/#home', protectedRoute: false },
@@ -11,6 +12,8 @@ const links = [
   { id: 5, name: 'Events', link: '/events', protectedRoute: true },
   { id: 6, name: 'Finances', link: '/finances', protectedRoute: true },
 ]
+
+const auth = useAuthStore.getState().auth
 
 function NavLinks({ onToggle, isProtected }) {
   return (
@@ -33,7 +36,7 @@ function NavActions({ isProtected }) {
     <>
       {isProtected ? (
         <div className="flex items-center gap-2">
-          <p>Hello</p>
+          <i>{auth.user.firstname}</i>
           <Button size="sm" variant="destructive" className="mx-3 px-6">
             Logout
           </Button>
@@ -49,8 +52,6 @@ function NavActions({ isProtected }) {
 
 function Header() {
   const [isMenuOpen, setMenuOpen] = useState(false)
-  const [isLoggedin, setLoggedin] = useState(false)
-
   const handleToggleMenu = () => {
     setMenuOpen(!isMenuOpen)
   }
@@ -91,12 +92,12 @@ function Header() {
       <div className="hidden gap-2 md:flex">
         <NavLinks
           onToggle={() => handleToggleMenu()}
-          isProtected={isLoggedin ? true : false}
+          isProtected={auth ? true : false}
         />
       </div>
 
       <div className="hidden gap-2 md:flex">
-        <NavActions isProtected={isLoggedin ? true : false} />
+        <NavActions isProtected={auth ? true : false} />
       </div>
 
       {isMenuOpen === true && (
@@ -109,9 +110,9 @@ function Header() {
         >
           <NavLinks
             onToggle={() => handleToggleMenu()}
-            isProtected={isLoggedin ? true : false}
+            isProtected={auth ? true : false}
           />
-          <NavActions isProtected={isLoggedin ? true : false} />
+          <NavActions isProtected={auth ? true : false} />
         </motion.div>
       )}
     </header>
