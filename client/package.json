@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.14",
+    "gsap": "^3.12.5",
     "json-server": "^1.0.0-alpha.23",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.357.0",

@@ -12,7 +12,7 @@ import FeatureCard from '@/components/ui/FeatureCard'
 import FAQ from '@/components/ui/FAQ'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
-import useAuthStore from '@/services/state/useAuthStore'
+import { Link } from 'react-router-dom'
 
 const features = [
   {
@@ -95,14 +95,18 @@ function Home() {
                     every detail of your event with ease and precision.
                   </p>
                   <div className="mx-auto mt-12 flex w-72 gap-4  sm:gap-6 md:w-auto md:justify-start">
-                    <Button className="flex-1 rounded-full bg-green-700 transition-all duration-300 ease-linear">
-                      Get started
+                    <Button
+                      className="flex-1 rounded-full bg-green-700 transition-all duration-300 ease-linear"
+                      asChild
+                    >
+                      <Link to="/signin">Get started</Link>
                     </Button>
                     <Button
                       variant="outline"
                       className="flex-1 rounded-full transition-all duration-300 ease-linear"
+                      asChild
                     >
-                      Learn more
+                      <Link to="/#features">Learn more</Link>
                     </Button>
                   </div>
                 </div>

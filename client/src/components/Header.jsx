@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import useAuthStore from '@/services/state/useAuthStore'
 import {
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Edit, NewspaperIcon, User } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const links = [
   { id: 1, name: 'Home', link: '/#home', protectedRoute: false },
@@ -23,14 +24,25 @@ const links = [
 ]
 
 function NavLinks({ onToggle, isProtected }) {
+  const location = useLocation()
+
   return (
     <>
       {links
         .filter((link) => link.protectedRoute === isProtected)
         .map((filtered) => (
-          <Button key={filtered.id} size="sm" variant="link" asChild>
+          <Button
+            key={filtered.id}
+            size="sm"
+            variant="ghost"
+            className="relative ms-2 flex w-[96%] justify-start p-2 md:w-auto md:justify-center md:px-5"
+            asChild
+          >
             <Link to={filtered.link} onClick={onToggle}>
               {filtered.name}
+              {location.pathname === filtered.link && (
+                <div className="absolute inset-y-8 h-1 w-10 rounded-xl bg-green-700" />
+              )}
             </Link>
           </Button>
         ))}
@@ -47,15 +59,16 @@ function NavActions({ isProtected, onLogout, user }) {
             <Button
               variant="outline"
               size="sm"
-              className="flex items-center gap-2 px-4 text-[16px] "
+              className="flex w-44 items-center gap-2 px-4 text-[16px]"
             >
               <User size="18px" />
-
               {user?.name || "You're logged in!"}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuContent className="w-44">
+            <DropdownMenuLabel className="text-gray-500">
+              My Account
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Button
@@ -64,7 +77,7 @@ function NavActions({ isProtected, onLogout, user }) {
                 className="text-gray-500"
                 asChild
               >
-                <Link to="/" className="flex gap-2" onClick={() => {}}>
+                <Link to="/" className="flex gap-2">
                   <NewspaperIcon size="18px" />
                   <p>Profile</p>
                 </Link>
@@ -77,7 +90,7 @@ function NavActions({ isProtected, onLogout, user }) {
                 className="text-gray-500"
                 asChild
               >
-                <Link to="/" className="flex gap-2" onClick={() => {}}>
+                <Link to="/" className="flex gap-2">
                   <Edit size="18px" />
                   <p>Account Settings</p>
                 </Link>
@@ -148,7 +161,7 @@ function Header() {
               )}
             </svg>
           </button>
-          Event Ease
+          <Link to="/#home">Event Ease</Link>
         </div>
       </div>
       <div className="hidden gap-2 md:flex">

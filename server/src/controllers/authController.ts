@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { promises } from 'stream'
 
 const SECRET_KEY = process.env.JWT_SECRET
 
@@ -11,6 +12,8 @@ export const registerUser =
       req.body
 
     try {
+      const checkMiddlename = middlename ? middlename : null
+      console.log('🚀 ~ checkMiddlename:', checkMiddlename)
       const hashedPassword = await bcrypt.hash(password, 10)
       const user = await prisma.user.create({
         data: {
@@ -19,11 +22,20 @@ export const registerUser =
           birthdate,
           firstname,
           lastname,
-          middlename,
+          middlename: checkMiddlename,
         },
       })
+      console.log('🚀 ~ user:', user)
 
-      res.json({ message: 'User registered successfully' })
+      const token = jwt.sign({ userId: user.id }, SECRET_KEY, {
+        expiresIn: '1h',
+      })
+
+      res.cookie('token', token, {
+        httpOnly: true,
+      })
+
+      res.json({ id: user.id, name: user.firstname })
     } catch (error) {
       res.status(500).json({ error: 'Failed to register user' })
     }
@@ -37,11 +49,10 @@ export const loginUser =
       const user = await prisma.user.findUnique({ where: { email } })
 
       if (!user) {
-        return res.status(404).json({ error: 'User not found' })
+        return res.status(404).json({ error: "Couldn't find your account." })
       }
 
-      //   const isPasswordValid = await bcrypt.compare(password, user.password)
-      const isPasswordValid = password === user.password
+      const isPasswordValid = await bcrypt.compare(password, user.password)
 
       if (!isPasswordValid) {
         return res
