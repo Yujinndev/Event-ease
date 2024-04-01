@@ -37,7 +37,7 @@ export default function SignIn() {
   const setAuthLogin = useAuthStore((state) => state.login)
   const auth = useAuthStore.getState().auth
   useEffect(() => {
-    if (auth) navigate('/')
+    if (auth) navigate('/signin')
   }, [auth])
 
   const form = useForm({
@@ -55,9 +55,10 @@ export default function SignIn() {
         password: data.password,
       })
 
-      localStorage.setItem('user', JSON.stringify(response.data))
-      setAuthLogin(JSON.stringify(response.data))
+      const userdetails = JSON.stringify(response.data)
+      setAuthLogin(userdetails)
 
+      localStorage.setItem('user', userdetails)
       navigate('/dashboard', { replace: true })
     } catch (error) {
       const message = error?.response?.data?.error

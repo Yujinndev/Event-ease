@@ -56,6 +56,8 @@ export const loginUser =
       res.cookie('token', token, {
         httpOnly: true,
       })
+
+      res.json({ id: user.id, name: user.firstname })
     } catch (error) {
       res.status(500).json({ error: 'Failed to login' })
     }

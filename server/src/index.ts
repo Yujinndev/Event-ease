@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from 'express'
+import { PrismaClient } from '@prisma/client'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import { PrismaClient } from '@prisma/client'
-import { authRouter } from './routes/authentication'
+import { authRouter } from './routes/authRoutes'
 
 const app: Express = express()
 const prisma = new PrismaClient()
