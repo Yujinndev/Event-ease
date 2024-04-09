@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Edit, NewspaperIcon, User } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 const links = [
   { id: 1, name: 'Home', link: '/#home', protectedRoute: false },
@@ -59,10 +58,9 @@ function NavActions({ isProtected, onLogout, user }) {
             <Button
               variant="outline"
               size="sm"
-              className="flex w-44 items-center gap-2 px-4 text-[16px]"
+              className="flex w-20 items-center gap-2 px-4 text-[16px]"
             >
               <User size="18px" />
-              {user?.name || "You're logged in!"}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-44">
@@ -120,7 +118,7 @@ function NavActions({ isProtected, onLogout, user }) {
 function Header() {
   const navigate = useNavigate()
   const setLogout = useAuthStore((state) => state.logout)
-  const auth = useAuthStore.getState().auth
+  const auth = useAuthStore.getState().user
   const [isMenuOpen, setMenuOpen] = useState(false)
   const handleToggleMenu = () => {
     setMenuOpen(!isMenuOpen)

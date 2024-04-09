@@ -1,30 +1,99 @@
 import Header from '@/components/Header'
+import GradientBg from '@/components/ui/GradientBg'
+import useAuthStore from '@/services/state/useAuthStore'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import guestLogo from '@/assets/guest-image.png'
+import useUserDetails from '@/hooks/useUserDetails'
 
 function Dashboard() {
+  const user = useAuthStore.getState().user
+  console.log('🚀 ~ Dashboard ~ user:', user)
+  const { data, isLoading } = useUserDetails(user)
+  console.log('🚀 ~ Dashboard ~ data:', data)
+
+  if (isLoading) return <div>Loading ... </div>
+
   return (
     <>
       <Header />
       <div className="relative overflow-hidden">
-        <div className="absolute inset-x-0 top-64 lg:left-24 lg:top-72">
-          <div
-            aria-hidden="true"
-            className="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-7xl"
-          >
-            <div className="h-60 bg-gradient-to-br from-purple-400 to-indigo-300 blur-3xl dark:from-blue-700"></div>
-            <div className="h-72 rounded-full bg-gradient-to-r from-green-400 to-lime-300 blur-3xl dark:from-transparent dark:to-indigo-600"></div>
-          </div>
-        </div>
+        <GradientBg />
 
-        <section
-          className="mx-auto mt-4 max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0"
-          id="home"
-        >
-          <div className="relative ml-auto pt-40 xl:pt-36">
-            <div className="gap-12 md:flex md:items-center">
+        <section className="mx-auto mt-4 max-w-screen-2xl px-8 md:px-14 xl:px-20">
+          <div className="relative ml-auto pt-20">
+            <div className="gap-12">
               <div className="p-12 text-center md:w-2/3 md:px-0 md:text-left lg:w-1/2">
                 <h1 className="text-5xl font-black dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
-                  Dashboard
+                  Hello, {data.user.firstname}!
                 </h1>
+              </div>
+              <div className="flex flex-col gap-4">
+                <p className="mt-4 text-[17px] font-bold dark:text-gray-300 md:text-xl">
+                  Upcoming Events
+                </p>
+                <div className="flex flex-col gap-2 lg:flex-row">
+                  <Card className="relative flex-1">
+                    <img
+                      src={guestLogo}
+                      className="relative w-full"
+                      loading="lazy"
+                    />
+                    <CardContent>
+                      <CardTitle>Card Title</CardTitle>
+                      <CardDescription>Card Description</CardDescription>
+                    </CardContent>
+                  </Card>
+                  <Card className="relative flex-1">
+                    <img
+                      src={guestLogo}
+                      className="relative w-full"
+                      loading="lazy"
+                    />
+                    <CardContent>
+                      <CardTitle>Card Title</CardTitle>
+                      <CardDescription>Card Description</CardDescription>
+                    </CardContent>
+                  </Card>
+                  <Card className="relative flex-1">
+                    <img
+                      src={guestLogo}
+                      className="relative w-full"
+                      loading="lazy"
+                    />
+                    <CardContent>
+                      <CardTitle>Card Title</CardTitle>
+                      <CardDescription>Card Description</CardDescription>
+                    </CardContent>
+                  </Card>
+                  <Card className="relative flex-1">
+                    <img
+                      src={guestLogo}
+                      className="relative w-full"
+                      loading="lazy"
+                    />
+                    <CardContent>
+                      <CardTitle>Card Title</CardTitle>
+                      <CardDescription>Card Description</CardDescription>
+                    </CardContent>
+                  </Card>
+                  <Card className="relative flex-1">
+                    <img
+                      src={guestLogo}
+                      className="relative w-full"
+                      loading="lazy"
+                    />
+                    <CardContent>
+                      <CardTitle>Card Title</CardTitle>
+                      <CardDescription>Card Description</CardDescription>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </div>
           </div>

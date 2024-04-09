@@ -23,6 +23,7 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form'
+import GradientBg from '@/components/ui/GradientBg'
 
 const userSchema = z.object({
   firstname: z.string().min(1, {
@@ -44,11 +45,13 @@ const userSchema = z.object({
 export default function Register() {
   const navigate = useNavigate()
   const setAuthLogin = useAuthStore((state) => state.login)
-  const auth = useAuthStore.getState().auth
-  useEffect(() => {
-    if (auth) navigate('/signin')
-  }, [auth])
+  const auth = useAuthStore.getState().user
 
+  useEffect(() => {
+    if (auth !== null) {
+      navigate('/dashboard')
+    }
+  }, [auth])
   const form = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -72,10 +75,11 @@ export default function Register() {
         birthdate: data.birthdate,
       })
 
-      const userdetails = JSON.stringify(response.data)
-      setAuthLogin(userdetails)
+      const userdetails = JSON.stringify(response?.data)
+      const token = response?.data?.token
 
-      localStorage.setItem('user', userdetails)
+      localStorage.setItem('_tkn', token)
+      useAuthStore.getState().login(userdetails)
       navigate('/dashboard', { replace: true })
     } catch (error) {
       const message = error?.response?.data?.error
@@ -86,15 +90,7 @@ export default function Register() {
   return (
     <section className="w-full lg:grid lg:grid-cols-2">
       <div className="relative flex min-h-screen items-center justify-center p-6 py-12">
-        <div className="absolute inset-x-0 top-64 md:hidden lg:left-24 lg:top-72">
-          <div
-            aria-hidden="true"
-            className="mt-20 grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-7xl"
-          >
-            <div className="h-60 bg-gradient-to-br from-purple-400 to-indigo-300 blur-3xl dark:from-blue-700"></div>
-            <div className="h-72 rounded-full bg-gradient-to-r from-green-400 to-lime-300 blur-3xl dark:from-transparent dark:to-indigo-600"></div>
-          </div>
-        </div>
+        <GradientBg />
         <Card className="z-10 m-auto grid w-full gap-6 bg-white lg:w-[550px] lg:px-8 lg:py-4">
           <CardHeader className="-mb-4">
             <CardTitle className="text-2xl">

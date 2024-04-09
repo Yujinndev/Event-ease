@@ -1,12 +1,11 @@
 import { Router } from 'express'
-import { PrismaClient } from '@prisma/client'
 import { registerUser, loginUser } from '../controllers/authController'
 
-export const authRouter = (prisma: PrismaClient) => {
+export const authRouter = () => {
   const router = Router()
 
-  router.post('/register', registerUser(prisma))
-  router.post('/login', loginUser(prisma))
+  router.post('/register', registerUser)
+  router.post('/login', loginUser)
 
   return router
 }

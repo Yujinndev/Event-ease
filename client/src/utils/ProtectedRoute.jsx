@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useNavigate, Outlet } from 'react-router-dom'
 
 const ProtectedRoute = () => {
-  const auth = useAuthStore.getState().auth
+  const auth = useAuthStore.getState().user
   const navigate = useNavigate()
 
   useEffect(() => {

@@ -1,9 +1,16 @@
 import { create } from 'zustand'
 
 const useAuthStore = create((set) => ({
-  auth: JSON.parse(localStorage.getItem('user')) || null,
-  login: (user) => set({ auth: user }),
-  logout: () => set({ auth: null }),
+  user: localStorage.getItem('user') || null,
+  login: (userdata) => {
+    set({ user: userdata })
+    localStorage.setItem('user', userdata)
+  },
+  logout: () => {
+    set({ user: null })
+    localStorage.removeItem('user')
+    localStorage.removeItem('_tkn')
+  },
 }))
 
 export default useAuthStore

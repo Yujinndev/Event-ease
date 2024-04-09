@@ -13,6 +13,7 @@ import FAQ from '@/components/ui/FAQ'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { Link } from 'react-router-dom'
+import GradientBg from '@/components/ui/GradientBg'
 
 const features = [
   {
@@ -68,19 +69,11 @@ function Home() {
   return (
     <>
       <Header />
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-x-0 top-64 lg:left-24 lg:top-72">
-          <div
-            aria-hidden="true"
-            className="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-7xl"
-          >
-            <div className="h-60 bg-gradient-to-br from-purple-400 to-indigo-300 blur-3xl dark:from-blue-700"></div>
-            <div className="h-72 rounded-full bg-gradient-to-r from-green-400 to-lime-300 blur-3xl dark:from-transparent dark:to-indigo-600"></div>
-          </div>
-        </div>
 
+      <div className="relative overflow-hidden">
+        <GradientBg />
         <section
-          className="mx-auto mt-4 max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0"
+          className="mx-auto mt-4 max-w-6xl px-6 md:px-12 lg:px-6 xl:px-0"
           id="home"
         >
           <div className="relative ml-auto pt-40 xl:pt-36">
@@ -127,7 +120,7 @@ function Home() {
         </section>
 
         <section className="relative pt-32 md:pt-44" id="features">
-          <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0">
+          <div className="mx-auto max-w-6xl px-6 md:px-12 lg:px-6 xl:px-0">
             <div className="mx-auto md:w-3/5">
               <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
                 Shaped to meet your needs
@@ -170,7 +163,7 @@ function Home() {
           className="relative overflow-hidden pt-32 md:pt-44"
           id="aboutUs"
         >
-          <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-6 xl:px-0">
+          <div className="mx-auto max-w-6xl px-6 md:px-12 lg:px-6 xl:px-0">
             <div className="mx-auto md:w-3/5">
               <h2 className="text-center text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
                 More about us

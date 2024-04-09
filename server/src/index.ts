@@ -1,12 +1,12 @@
 import express, { Express, Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { authRouter } from './routes/authRoutes'
+import { userRouter } from './routes/userRoutes'
+import { authMiddleware } from './middleware/authentication'
 
 const app: Express = express()
-const prisma = new PrismaClient()
 const port = process.env.PORT || 8080
 
 app.use(
@@ -17,14 +17,11 @@ app.use(
 )
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World')
-})
-
-app.use('/auth', authRouter(prisma))
+app.use('/auth', authRouter())
+app.use('/user', authMiddleware, userRouter())
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`)

@@ -30,16 +30,14 @@ function Footer() {
   return (
     <footer className="bg-gradient-to-b from-transparent to-gray-100 py-12 dark:to-gray-900">
       <div className="mx-auto max-w-6xl px-6 md:px-12 lg:px-6 xl:px-0">
-        <a
-          href="#home"
-          aria-label="logo"
+        <Link
+          to="/#home"
           className="flex items-center justify-center space-x-2"
         >
           <span className="brand text-2xl font-bold text-green-700 dark:text-white">
             Event Ease
           </span>
-        </a>
-
+        </Link>
         <NavLinks />
 
         <div className="text-center">
