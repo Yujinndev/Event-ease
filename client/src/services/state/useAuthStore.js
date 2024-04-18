@@ -10,6 +10,7 @@ const useAuthStore = create((set) => ({
     set({ user: null })
     localStorage.removeItem('user')
     localStorage.removeItem('_tkn')
+    localStorage.removeItem('isFirstVisit')
   },
 }))
 
