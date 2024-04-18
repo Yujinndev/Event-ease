@@ -12,7 +12,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
   try {
     const checkMiddlename = middlename ? middlename : null
-    console.log('🚀 ~ checkMiddlename:', checkMiddlename)
+
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = await prisma.user.create({
       data: {
@@ -23,6 +23,12 @@ export const registerUser = async (req: Request, res: Response) => {
         lastname,
         middlename: checkMiddlename,
       },
+    })
+
+    // invalidate token
+    res.clearCookie('token', {
+      sameSite: 'none',
+      secure: true,
     })
 
     const token = jwt.sign({ userID: user.id }, SECRET_KEY, {
@@ -57,6 +63,12 @@ export const loginUser = async (req: Request, res: Response) => {
         .status(401)
         .json({ error: 'Incorrect password, Please try again' })
     }
+
+    // invalidate token
+    res.clearCookie('token', {
+      sameSite: 'none',
+      secure: true,
+    })
 
     const token = jwt.sign({ userID: user.id }, SECRET_KEY, {
       expiresIn: '1h',

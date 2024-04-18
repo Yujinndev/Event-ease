@@ -22,7 +22,7 @@ export const authMiddleware = (
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY)
-    req.body.userId = (decoded as { userId: number }).userId
+    req.body.userID = (decoded as { userID: string }).userID
 
     next()
   } catch (error) {

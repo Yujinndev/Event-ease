@@ -5,6 +5,7 @@ import cors from 'cors'
 import { authRouter } from './routes/authRoutes'
 import { userRouter } from './routes/userRoutes'
 import { authMiddleware } from './middleware/authentication'
+import { eventRouter } from './routes/eventRoutes'
 
 const app: Express = express()
 const port = process.env.PORT || 8080
@@ -22,6 +23,7 @@ app.use(cookieParser())
 
 app.use('/auth', authRouter())
 app.use('/user', authMiddleware, userRouter())
+app.use('/event', authMiddleware, eventRouter())
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`)

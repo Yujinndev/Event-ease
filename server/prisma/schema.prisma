@@ -57,6 +57,8 @@ model Event {
   desc          String
   category      String
   date          DateTime
+  startTime     String?
+  endTime       String?
   location      String
   status        EventStatus
   guests        EventGuest[]
@@ -72,6 +74,7 @@ enum EventStatus {
   DONE
   CANCELED
   RESCHEDULED
+  UPCOMING
 }
 
 model EventGuest {
