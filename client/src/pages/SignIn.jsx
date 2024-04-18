@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import GradientBg from '@/components/ui/GradientBg'
+import { useQueryClient } from '@tanstack/react-query'
 
 const userSchema = z.object({
   email: z.string().email({
@@ -37,6 +38,7 @@ const userSchema = z.object({
 export default function SignIn() {
   const navigate = useNavigate()
   const auth = useAuthStore.getState().user
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (auth !== null) {
@@ -63,9 +65,12 @@ export default function SignIn() {
       const token = response?.data?.token
 
       localStorage.setItem('_tkn', token)
-
       useAuthStore.getState().login(userdetails)
-      navigate('/dashboard', { replace: true })
+
+      queryClient.invalidateQueries(['user'])
+      queryClient.invalidateQueries(['events'])
+
+      window.location.href = 'http://localhost:5173/dashboard'
     } catch (error) {
       const message = error?.response?.data?.error
       form.setError('root', { message: message })

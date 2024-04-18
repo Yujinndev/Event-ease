@@ -52,6 +52,7 @@ export default function Register() {
       navigate('/dashboard')
     }
   }, [auth])
+
   const form = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -75,12 +76,16 @@ export default function Register() {
         birthdate: data.birthdate,
       })
 
-      const userdetails = JSON.stringify(response?.data)
+      const userdetails = response?.data?.userId
       const token = response?.data?.token
 
       localStorage.setItem('_tkn', token)
       useAuthStore.getState().login(userdetails)
-      navigate('/dashboard', { replace: true })
+
+      queryClient.invalidateQueries(['user'])
+      queryClient.invalidateQueries(['events'])
+
+      window.location.href = 'http://localhost:5173/dashboard'
     } catch (error) {
       const message = error?.response?.data?.error
       form.setError('root', { message: message })

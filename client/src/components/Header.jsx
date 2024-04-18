@@ -39,7 +39,7 @@ function NavLinks({ onToggle, isProtected }) {
           >
             <Link to={filtered.link} onClick={onToggle}>
               {filtered.name}
-              {location.pathname === filtered.link && (
+              {location.pathname.startsWith(filtered.link) && (
                 <div className="absolute inset-y-8 h-1 w-10 rounded-xl bg-green-700" />
               )}
             </Link>
@@ -58,7 +58,7 @@ function NavActions({ isProtected, onLogout, user }) {
             <Button
               variant="outline"
               size="sm"
-              className="flex w-20 items-center gap-2 px-4 text-[16px]"
+              className="flex w-44 items-center gap-2 px-4 text-[16px]"
             >
               <User size="18px" />
             </Button>
@@ -133,7 +133,7 @@ function Header() {
   return (
     <header className="min-w-screen z-50 flex justify-between border-b-[1px] md:items-center md:px-4 lg:justify-around lg:px-0">
       <div className="flex w-screen items-center justify-between py-3 md:w-auto md:px-4 lg:justify-around">
-        <div className="brand flex gap-2 text-xl font-bold text-green-700 lg:text-2xl">
+        <div className="brand flex gap-2 text-xl font-bold text-primary lg:text-2xl">
           <button className="md:hidden" onClick={() => handleToggleMenu()}>
             <svg
               className="h-6 w-6"
@@ -159,7 +159,12 @@ function Header() {
               )}
             </svg>
           </button>
-          <Link to="/#home">Event Ease</Link>
+          <Link to="/#home">
+            Event Ease
+            {location.pathname === '/' && (
+              <div className="absolute inset-y-12 h-1 w-24 rounded-xl bg-primary" />
+            )}
+          </Link>
         </div>
       </div>
       <div className="hidden gap-2 md:flex">

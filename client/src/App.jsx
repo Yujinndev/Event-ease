@@ -1,12 +1,18 @@
 import './App.css'
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from 'react-router-dom'
 
 import Home from '@/pages/Home'
 import SignIn from '@/pages/SignIn'
 import Register from '@/pages/Register'
 import Dashboard from '@/pages/Dashboard'
-import Events from '@/pages/Events'
+import Events from '@/pages/event/Events'
+import EventDetail from './pages/event/EventDetail'
 import Finances from '@/pages/Finances'
 
 import ScrollToAnchor from '@/utils/ScrollToAnchor'
@@ -25,7 +31,11 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/events" element={<Events />} />
+            <Route path="/" element={<Outlet />}>
+              <Route path="events" element={<Events />} />
+              <Route path="events-detail/:id" element={<EventDetail />} />
+            </Route>
+
             <Route path="/finances" element={<Finances />} />
           </Route>
         </Routes>

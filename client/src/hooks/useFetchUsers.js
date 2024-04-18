@@ -3,10 +3,7 @@ import axios from '@/lib/axios'
 
 const getUserDetails = async (id) => {
   try {
-    const response = await axios.get(`/user/details/${id}`, {
-      withCredentials: true,
-    })
-    console.log('🚀 ~ getUserDetails ~ response.data:', response.data)
+    const response = await axios.get(`/user/details/${id}`)
     return response.data
   } catch (error) {
     throw new Error(`Error fetching: ${error.message}`)
@@ -15,7 +12,7 @@ const getUserDetails = async (id) => {
 
 const useUserDetails = (id) => {
   const queryResult = useQuery({
-    queryKey: ['user', id],
+    queryKey: ['user'],
     queryFn: () => getUserDetails(id),
     enabled: !!id,
   })

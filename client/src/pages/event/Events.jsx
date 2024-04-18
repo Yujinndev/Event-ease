@@ -1,11 +1,12 @@
-import { Suspense } from 'react'
+import Header from '@/components/Header'
+import GradientBg from '@/components/ui/GradientBg'
+import { useGetAllEvents } from '@/hooks/useFetchEvents'
 import { Link } from 'react-router-dom'
+import { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
 import { months } from '@/utils/MonthData'
-import useAuthStore from '@/services/state/useAuthStore'
-import { useGetAllEvents } from '@/hooks/useFetchEvents'
-import useUserDetails from '@/hooks/useFetchUsers'
+import { SkeletonCard } from '@/components/ui/SkeletonEventCard'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -16,14 +17,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import { SkeletonCard } from '@/components/ui/SkeletonEventCard'
-import GradientBg from '@/components/ui/GradientBg'
-import Header from '@/components/Header'
 
-function Dashboard() {
-  const auth = useAuthStore.getState().user
-  const { data: loggedUser } = useUserDetails(auth)
+function Events() {
   const { data: userEvents, isSuccess } = useGetAllEvents()
   const currentDate = Date.now()
 
@@ -41,11 +36,11 @@ function Dashboard() {
         <GradientBg />
 
         <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
-          <div className="relative ml-auto py-20">
+          <div className="relative ml-auto pt-20">
             <div className="gap-12">
               <div className="pb-8 md:w-2/3 md:py-12 lg:w-1/2">
-                <h1 className="text-5xl font-black dark:text-white md:text-4xl lg:text-5xl xl:text-6xl">
-                  Hello, {loggedUser?.user?.firstname}!
+                <h1 className="text-4xl font-black dark:text-white">
+                  See your scheduled events
                 </h1>
               </div>
               <div className="flex flex-col gap-4">
@@ -53,12 +48,6 @@ function Dashboard() {
                   <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
                     Upcoming Events
                   </p>
-                  <Link
-                    to="/events"
-                    className="text-[14px] text-blue-500 underline underline-offset-4 dark:text-gray-300 md:text-lg"
-                  >
-                    See All
-                  </Link>
                 </div>
 
                 {isSuccess && upcomingEvents.length > 0 ? (
@@ -174,47 +163,6 @@ function Dashboard() {
                   </Table>
                 </div>
               </div>
-              <div className="ml-auto flex flex-col gap-4 pt-20">
-                <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
-                  Recent Transactions
-                </p>
-
-                <div className="overflow flex flex-col gap-2 rounded-xl lg:flex-row">
-                  <Table>
-                    <TableHeader className="bg-primary">
-                      <TableRow>
-                        <TableHead className="text-white">Type</TableHead>
-                        <TableHead className="text-white">
-                          Description
-                        </TableHead>
-                        <TableHead className="text-white">
-                          Date of Transaction
-                        </TableHead>
-                        <TableHead className="text-white">Amount</TableHead>
-                        <TableHead className="text-white">
-                          Running Balance
-                        </TableHead>
-                        <TableHead></TableHead>
-                      </TableRow>
-                    </TableHeader>
-
-                    <TableBody>
-                      <TableRow>
-                        <TableCell className="font-medium"></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell className="text-right"></TableCell>
-                      </TableRow>
-                    </TableBody>
-                    <TableCaption>
-                      <p className="grid place-content-center text-base text-black">
-                        No recent Transactions
-                      </p>
-                    </TableCaption>
-                  </Table>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -223,4 +171,4 @@ function Dashboard() {
   )
 }
 
-export default Dashboard
+export default Events

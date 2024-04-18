@@ -34,7 +34,7 @@ function Footer() {
           to="/#home"
           className="flex items-center justify-center space-x-2"
         >
-          <span className="brand text-2xl font-bold text-green-700 dark:text-white">
+          <span className="brand text-2xl font-bold text-primary dark:text-white">
             Event Ease
           </span>
         </Link>
