@@ -11,6 +11,10 @@ const ProtectedRoute = () => {
   const isFirstVisit = localStorage.getItem('isFirstVisit')
 
   useEffect(() => {
+    if (auth === null) {
+      navigate('/signin', { replace: true })
+    }
+
     if (!isFirstVisit) {
       const timeout = setTimeout(() => {
         setLoading(false)
@@ -20,10 +24,6 @@ const ProtectedRoute = () => {
       return () => clearTimeout(timeout)
     } else {
       setLoading(false)
-    }
-
-    if (auth === null && isFirstVisit) {
-      navigate('/signin', { replace: true })
     }
   }, [auth])
 

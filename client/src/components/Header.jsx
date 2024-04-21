@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Edit, NewspaperIcon, User } from 'lucide-react'
 
 const links = [
@@ -55,13 +56,10 @@ function NavActions({ isProtected, onLogout, user }) {
       {isProtected ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex w-44 items-center gap-2 px-4 text-[16px]"
-            >
-              <User size="18px" />
-            </Button>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>{user}</AvatarFallback>
+            </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-44">
             <DropdownMenuLabel className="text-gray-500">

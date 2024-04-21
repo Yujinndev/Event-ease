@@ -1,12 +1,13 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { format } from 'date-fns'
 import Header from '@/components/Header'
 import LoadingPage from '@/components/LoadingPage'
 import GradientBg from '@/components/ui/GradientBg'
 import { Card, CardContent } from '@/components/ui/card'
 import { useGetEventById } from '@/hooks/useFetchEvents'
-import { months } from '@/utils/MonthData'
 import { Button } from '@/components/ui/button'
+import { ArrowUpRight, Clock8, MapPin } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 function EventDetail() {
   const { id } = useParams()
@@ -16,7 +17,7 @@ function EventDetail() {
 
   if (isSuccess) {
     const convertDate = new Date(data.date)
-    const formattedDate = format(convertDate, 'MMMM d, yyyy - HH:mm:ss')
+    const formattedDate = format(convertDate, 'MMMM d, yyyy - HH:mm')
 
     return (
       <>
@@ -26,12 +27,26 @@ function EventDetail() {
 
           <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
             <div className="relative ml-auto pt-20">
-              <div className="gap-12">
-                <div className="pb-8 md:w-2/3 md:py-12 lg:w-1/2">
-                  <h1 className="text-5xl font-black dark:text-white md:text-4xl lg:text-5xl xl:text-6xl">
-                    {data.title}
-                  </h1>
+              <div className="flex w-full flex-col-reverse justify-between md:flex-row md:items-center">
+                <div className="flex flex-1 flex-col items-start gap-4 pb-8 pt-4 md:w-2/3 md:py-8 lg:w-1/2">
+                  <Badge className="w-max">{data.category}</Badge>
+                  <div>
+                    <h1 className="text-4xl font-black dark:text-white md:text-4xl lg:text-5xl xl:text-6xl">
+                      {data.title}
+                    </h1>
+                    <small className="font-light">Hosted by: You</small>
+                  </div>
                 </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="w-max px-6 py-5"
+                  asChild
+                >
+                  <Link to="/events">
+                    Events Page <ArrowUpRight size={18} className="ms-2" />
+                  </Link>
+                </Button>
               </div>
 
               <div className="flex gap-8 border-b-2">
@@ -57,7 +72,7 @@ function EventDetail() {
               </div>
             </div>
 
-            <div className="relative ml-auto pt-8">
+            <div className="relative ml-auto py-8">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="flex flex-col gap-4">
                   <Card className="relative p-4">
@@ -70,15 +85,15 @@ function EventDetail() {
                     <CardContent className="absolute -mt-20 flex items-center gap-2">
                       <div className="flex flex-col items-center justify-center rounded-sm border bg-white px-4 py-2">
                         <p className="-mb-1 text-sm">
-                          {months[convertDate.getMonth()].slice(0, 3)}
+                          {format(convertDate, 'MMM')}
                         </p>
                         <p className="mb-0 text-xl font-black">
-                          {convertDate.getDay()}
+                          {format(convertDate, 'dd')}
                         </p>
                       </div>
                     </CardContent>
 
-                    <CardContent className="flex justify-end gap-2 pt-4">
+                    <CardContent className="flex justify-center gap-2 pt-4 lg:justify-end">
                       <Button variant="outline" className="w-32 rounded-full">
                         Edit
                       </Button>
@@ -91,26 +106,32 @@ function EventDetail() {
                   <Card>
                     <CardContent className="flex flex-col gap-2 p-8">
                       <h1 className="text-xl font-black">Timeline:</h1>
-                      <p className="ms-8 text-xl">{formattedDate}</p>
-                      <p className="ms-8 text-xl">{data.location}</p>
+                      <div className="ms-6 flex items-center gap-4 font-mono text-lg">
+                        <Clock8 size={24} className="flex-shrink-0" />
+                        {formattedDate}{' '}
+                        <Badge
+                          variant={
+                            data.status === 'UPCOMING' ? '' : 'destructive'
+                          }
+                          className="w-max"
+                        >
+                          {data.status}
+                        </Badge>
+                      </div>
+                      <div className="ms-6 flex items-center gap-4 font-mono text-lg">
+                        <MapPin size={24} />
+                        {data.location}
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
 
                 <Card>
                   <CardContent className="flex flex-col gap-2 p-8">
-                    <h1 className="text-xl font-black">Description:</h1>
-                    <p className="ms-8 text-justify text-xl">
-                      {data.desc} Lorem ipsum dolor sit amet, consectetur
-                      adipiscing elit. Ut in pellentesque ligula, egestas
-                      dapibus nisi. Quisque pretium enim quis erat vulputate, at
-                      convallis odio luctus. Curabitur vitae dui non nunc
-                      maximus fringilla. Pellentesque a justo lectus. Aenean
-                      cursus ex augue, a tristique enim ultrices in. Quisque mi
-                      metus, rutrum eget elit et, dignissim ultricies ante.
-                      Suspendisse luctus eleifend placerat. Praesent eleifend
-                      tellus quis felis porta mattis. Suspendisse potenti.
-                    </p>
+                    <div>
+                      <h1 className="text-xl font-black">Description:</h1>
+                      <p className="ms-8 text-justify text-xl">{data.desc}</p>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
