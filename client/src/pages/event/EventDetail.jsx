@@ -1,13 +1,48 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { format } from 'date-fns'
 import Header from '@/components/Header'
 import LoadingPage from '@/components/LoadingPage'
 import GradientBg from '@/components/ui/GradientBg'
-import { Card, CardContent } from '@/components/ui/card'
 import { useGetEventById } from '@/hooks/useFetchEvents'
 import { Button } from '@/components/ui/button'
 import { ArrowUpRight, Clock8, MapPin } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import axios from '@/lib/axios'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import FormError from '@/components/ui/FormError'
+import { useQueryClient } from '@tanstack/react-query'
+import UpdateFormDialog from '@/components/ui/UpdateFormDialog'
 
 function EventDetail() {
   const { id } = useParams()
@@ -40,7 +75,7 @@ function EventDetail() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="w-max px-6 py-5"
+                  className="w-max rounded-full px-6 py-5"
                   asChild
                 >
                   <Link to="/events">
@@ -94,12 +129,7 @@ function EventDetail() {
                     </CardContent>
 
                     <CardContent className="flex justify-center gap-2 pt-4 lg:justify-end">
-                      <Button variant="outline" className="w-32 rounded-full">
-                        Edit
-                      </Button>
-                      <Button className="w-32 rounded-full">
-                        Change Cover
-                      </Button>
+                      <UpdateFormDialog data={data} />
                     </CardContent>
                   </Card>
 

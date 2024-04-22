@@ -17,6 +17,7 @@ import Finances from '@/pages/Finances'
 
 import ScrollToAnchor from '@/utils/ScrollToAnchor'
 import ProtectedRoute from '@/utils/ProtectedRoute'
+import NewEvent from './pages/event/NewEvent'
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Outlet />}>
               <Route path="events" element={<Events />} />
-              <Route path="events-detail/:id" element={<EventDetail />} />
+              <Route path="events/detail/:id" element={<EventDetail />} />
+              <Route path="events/new" element={<NewEvent />} />
             </Route>
 
             <Route path="/finances" element={<Finances />} />

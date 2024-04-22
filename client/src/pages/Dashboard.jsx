@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
-import { months } from '@/utils/MonthData'
 import useAuthStore from '@/services/state/useAuthStore'
 import { useGetAllEvents } from '@/hooks/useFetchEvents'
 import useUserDetails from '@/hooks/useFetchUsers'
@@ -18,7 +17,7 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { SkeletonCard } from '@/components/ui/SkeletonEventCard'
-import GradientBg from '@/components/ui/GradientBg'
+import { Badge } from '@/components/ui/badge'
 import Header from '@/components/Header'
 
 function Dashboard() {
@@ -38,8 +37,6 @@ function Dashboard() {
     <>
       <Header />
       <div className="relative overflow-hidden">
-        <GradientBg />
-
         <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
           <div className="relative ml-auto py-20">
             <div className="gap-12">
@@ -55,50 +52,46 @@ function Dashboard() {
                   </p>
                   <Link
                     to="/events"
-                    className="text-[14px] text-blue-500 underline underline-offset-4 dark:text-gray-300 md:text-lg"
+                    className="text-[14px] text-blue-500 underline underline-offset-4 dark:text-gray-300 md:text-sm"
                   >
                     See All
                   </Link>
                 </div>
 
                 {isSuccess && upcomingEvents.length > 0 ? (
-                  <div className="overflow flex flex-col gap-2 lg:flex-row">
+                  <div className="overflow flex flex-col gap-2 md:flex-row lg:flex-wrap">
                     {upcomingEvents.map((events) => {
-                      let formattedDate = new Date(events.date)
+                      const convertDate = new Date(events.date)
 
                       return (
                         <motion.div
                           key={events.id}
-                          whileHover={{ scale: 1.025 }}
+                          whileHover={{ scale: 1.015 }}
                           whileTap={{ scale: 0.95 }}
-                          className="w-auto md:w-80"
+                          className="w-auto transition-all ease-linear md:w-80"
                         >
-                          <Link to={`/events-detail/${events.id}`}>
+                          <Link to={`/events/detail/${events.id}`}>
                             <Suspense fallback={<SkeletonCard />}>
-                              <Card>
+                              <Card className="group relative transition-all ease-linear">
                                 <img
                                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSZHgjV8ckMtH2AEwV7Q63QFOFZoVDKDy24MVx_9NVPA&s"
                                   alt="Example Image"
+                                  className="relative w-full filter group-hover:filter-none md:grayscale-50"
                                 />
                                 <CardContent className="flex items-center gap-2 pt-4">
                                   <div className="flex flex-col items-center justify-center rounded-sm border px-4 py-2">
                                     <p className="-mb-1 text-sm">
-                                      {months[formattedDate.getMonth()].slice(
-                                        0,
-                                        3
-                                      )}
+                                      {format(convertDate, 'MMM')}
                                     </p>
                                     <p className="mb-0 text-xl font-black">
-                                      {formattedDate.getDay()}
+                                      {format(convertDate, 'dd')}
                                     </p>
                                   </div>
                                   <div>
-                                    <p className="text-[17px] font-bold dark:text-gray-300">
+                                    <p className="text-[16px] font-bold dark:text-gray-300">
                                       {events.title}
                                     </p>
-                                    <small>
-                                      {events.desc.slice(0, 20)} ...
-                                    </small>
+                                    <Badge>{events.category}</Badge>
                                   </div>
                                 </CardContent>
                               </Card>
@@ -115,20 +108,27 @@ function Dashboard() {
                 )}
               </div>
               <div className="ml-auto flex flex-col gap-4 pt-20">
-                <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
-                  Recent Events
-                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
+                    Recent Events
+                  </p>
+                </div>
 
                 <div className="overflow flex flex-col gap-2 rounded-xl lg:flex-row">
                   <Table>
                     <TableHeader className="bg-primary">
                       <TableRow>
                         <TableHead className="text-white">Event Name</TableHead>
-                        <TableHead className="text-white">Location</TableHead>
-                        <TableHead className="text-white">
-                          Date of Event
+                        <TableHead className="hidden text-white lg:table-cell">
+                          Location
                         </TableHead>
-                        <TableHead className="text-white">Status</TableHead>
+                        <TableHead className="text-white">Date time</TableHead>
+                        <TableHead className="hidden text-white lg:table-cell">
+                          Category
+                        </TableHead>
+                        <TableHead className="hidden text-white lg:table-cell">
+                          Status
+                        </TableHead>
                         <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
@@ -138,16 +138,25 @@ function Dashboard() {
                           const convertDate = new Date(events.date)
                           const formattedDate = format(
                             convertDate,
-                            'MMMM d, yyyy - HH:mm:ss'
+                            'MMMM d, yyyy - HH:mm'
                           )
                           return (
-                            <TableRow key={events.id}>
-                              <TableCell className="font-medium">
+                            <TableRow key={events.id} className="bg-primary/10">
+                              <TableCell className="text-sm font-bold md:text-base">
                                 {events.title}
                               </TableCell>
-                              <TableCell>{events.location}</TableCell>
+                              <TableCell className="hidden lg:table-cell">
+                                {events.location}
+                              </TableCell>
                               <TableCell>{formattedDate}</TableCell>
-                              <TableCell>{events.status}</TableCell>
+                              <TableCell className="hidden lg:table-cell">
+                                {events.category}
+                              </TableCell>
+                              <TableCell className="hidden lg:table-cell">
+                                <Badge variant="destructive">
+                                  {events.status}
+                                </Badge>
+                              </TableCell>
                               <TableCell className="text-right">
                                 <Button
                                   size="sm"
@@ -155,7 +164,7 @@ function Dashboard() {
                                   className="w-20"
                                   asChild
                                 >
-                                  <Link to={`/events-detail/${events.id}`}>
+                                  <Link to={`/events/detail/${events.id}`}>
                                     View
                                   </Link>
                                 </Button>
@@ -175,23 +184,29 @@ function Dashboard() {
                 </div>
               </div>
               <div className="ml-auto flex flex-col gap-4 pt-20">
-                <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
-                  Recent Transactions
-                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
+                    Recent Transactions
+                  </p>
+                  <Link
+                    to="/events"
+                    className="text-[14px] text-blue-500 underline underline-offset-4 dark:text-gray-300 md:text-sm"
+                  >
+                    See All
+                  </Link>
+                </div>
 
                 <div className="overflow flex flex-col gap-2 rounded-xl lg:flex-row">
                   <Table>
                     <TableHeader className="bg-primary">
                       <TableRow>
                         <TableHead className="text-white">Type</TableHead>
-                        <TableHead className="text-white">
+                        <TableHead className="hidden text-white lg:table-cell">
                           Description
                         </TableHead>
-                        <TableHead className="text-white">
-                          Date of Transaction
-                        </TableHead>
+                        <TableHead className="text-white">Date time</TableHead>
                         <TableHead className="text-white">Amount</TableHead>
-                        <TableHead className="text-white">
+                        <TableHead className="hidden text-white lg:table-cell">
                           Running Balance
                         </TableHead>
                         <TableHead></TableHead>
@@ -199,8 +214,9 @@ function Dashboard() {
                     </TableHeader>
 
                     <TableBody>
-                      <TableRow>
+                      <TableRow className="bg-primaryy/10">
                         <TableCell className="font-medium"></TableCell>
+                        <TableCell className="hidden lg:table-cell"></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>

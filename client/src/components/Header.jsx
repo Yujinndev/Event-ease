@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Edit, NewspaperIcon, User } from 'lucide-react'
+import { Edit, NewspaperIcon } from 'lucide-react'
 
 const links = [
   { id: 1, name: 'Home', link: '/#home', protectedRoute: false },
@@ -61,7 +61,7 @@ function NavActions({ isProtected, onLogout, user }) {
               <AvatarFallback>{user}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-44">
+          <DropdownMenuContent className="me-4 w-44 lg:me-0">
             <DropdownMenuLabel className="text-gray-500">
               My Account
             </DropdownMenuLabel>
@@ -172,7 +172,7 @@ function Header() {
         />
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center md:w-20 lg:w-36">
         <NavActions
           isProtected={auth ? true : false}
           onLogout={() => handleLogout()}
