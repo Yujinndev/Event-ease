@@ -42,7 +42,7 @@ import {
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import FormError from '@/components/ui/FormError'
 import { useQueryClient } from '@tanstack/react-query'
-import UpdateFormDialog from '@/components/ui/UpdateFormDialog'
+import UpdateFormDialog from '@/components/UpdateFormDialog'
 
 function EventDetail() {
   const { id } = useParams()

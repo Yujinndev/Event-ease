@@ -8,7 +8,7 @@ import {
   FaCalendarDays,
 } from 'react-icons/fa6'
 import { Button } from '@/components/ui/button'
-import FeatureCard from '@/components/ui/FeatureCard'
+import FeatureCard from '@/components/FeatureCard'
 import FAQ from '@/components/ui/FAQ'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'

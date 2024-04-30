@@ -27,11 +27,10 @@ function Dashboard() {
   const currentDate = Date.now()
 
   const upcomingEvents = userEvents?.filter(
-    (el) => new Date(el.date) > currentDate
+    (el) => new Date(el.date) > currentDate || el.status === 'UPCOMING'
   )
-  const recentEvents = userEvents?.filter(
-    (el) => new Date(el.date) < currentDate
-  )
+
+  const recentEvents = userEvents?.filter((el) => el.status === 'DONE')
 
   return (
     <>
