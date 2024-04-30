@@ -24,13 +24,6 @@ import axios from '@/lib/axios'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import FormError from '@/components/ui/FormError'
 import { useQueryClient } from '@tanstack/react-query'
@@ -41,7 +34,7 @@ import { useState } from 'react'
 function UpdateFormDialog({ data }) {
   const eventId = data.id
   const convertDate = new Date(data.date)
-  const formattedDate = convertDate.toISOString().slice(0, 16) // Extract the date and time part
+  const formattedDate = format(convertDate, 'yyyy-MM-dd HH:mm')
 
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -196,6 +189,7 @@ function UpdateFormDialog({ data }) {
                         <SelectGroup>
                           <SelectItem value="UPCOMING">Upcoming</SelectItem>
                           <SelectItem value="DONE">Done</SelectItem>
+                          <SelectItem value="CANCELED">Cancelled</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
