@@ -89,13 +89,11 @@ function NewEvent() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className=" absolute -inset-x-3 -inset-y-5 w-max rounded-full py-4 lg:-inset-x-12 lg:-inset-y-8"
-                  asChild
+                  className="absolute -inset-x-3 -inset-y-5 flex w-max gap-x-2 rounded-full py-4 lg:-inset-x-12 lg:-inset-y-8"
+                  onClick={() => navigate(-1)}
                 >
-                  <Link to="/events" className="flex gap-x-2">
-                    <ArrowUpLeft />
-                    <small className="hidden lg:block">Events</small>
-                  </Link>
+                  <ArrowUpLeft />
+                  <small className="hidden lg:block">Back</small>
                 </Button>
                 <CardTitle className="text-2xl">
                   Let's create your new event!

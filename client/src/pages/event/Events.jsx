@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 import { SkeletonCard } from '@/components/ui/SkeletonEventCard'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowUpRight, Clock8, MapPin } from 'lucide-react'
+import { ArrowUpRight, Clock8, MapPin, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const BUTTONS = ['Upcoming', 'Pending', 'Recent', 'Cancelled']
@@ -46,7 +46,7 @@ function Events() {
         <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
           <div className="relative ml-auto pt-20">
             <div className="pb-8 md:w-2/3 md:py-6 lg:w-1/2">
-              <h1 className="text-4xl font-black dark:text-white">
+              <h1 className="text-3xl font-black dark:text-white">
                 See your scheduled events
               </h1>
             </div>
@@ -67,16 +67,27 @@ function Events() {
                   )
                 })}
               </div>
-              <Button
-                size="sm"
-                variant="outline"
-                className="w-max rounded-full px-6 py-5"
-                asChild
-              >
-                <Link to="/events/v/calendar">
-                  Calendar View <ArrowUpRight size={18} className="ms-2" />
-                </Link>
-              </Button>
+              <div className="flex justify-center gap-2">
+                <Button
+                  size="sm"
+                  className="w-max rounded-full px-3 py-5"
+                  asChild
+                >
+                  <Link to="/events/new">
+                    <Plus size={18} />
+                  </Link>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="w-max rounded-full px-6 py-5"
+                  asChild
+                >
+                  <Link to="/events/v/calendar">
+                    Calendar View <ArrowUpRight size={18} className="ms-2" />
+                  </Link>
+                </Button>
+              </div>
             </div>
 
             <div className="flex flex-col gap-4 py-8">
