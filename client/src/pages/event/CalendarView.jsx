@@ -16,7 +16,6 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, ArrowUpRight, Plus } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { twMerge } from 'tailwind-merge'
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
@@ -74,7 +73,6 @@ const CalendarView = () => {
                 Events for {format(currentMonth, 'MMMM yyyy')}
               </h1>
             </div>
-
             <div className="flex items-center justify-center gap-2 lg:justify-end">
               <Button
                 size="sm"
@@ -97,77 +95,13 @@ const CalendarView = () => {
               </Button>
             </div>
 
-            <div className="grid grid-cols-7 gap-4 pt-8">
-              {WEEKDAYS.map((day) => {
-                return (
-                  <div key={day} className="text-center font-bold">
-                    {day}
-                  </div>
-                )
-              })}
-            </div>
-            <div className="relative grid grid-cols-7 gap-4 pt-4">
-              {Array.from({ length: startingDayIndex }).map((_, index) => {
-                return (
-                  <DateBlock
-                    key={`empty-${index}`}
-                    className="border-0 bg-slate-50/50 p-2 text-center"
-                  />
-                )
-              })}
-              {daysInMonth.map((day, index) => {
-                const dateKey = format(day, 'yyyy-MM-dd')
-                const todaysEvents = eventsByDate[dateKey] || []
-                return (
-                  <DateBlock
-                    whileHover={{ scale: 1.025 }}
-                    key={index}
-                    className={cn(
-                      'relative flex flex-col gap-2 rounded-md border p-2 font-mono text-base',
-                      {
-                        'bg-primary/90': isToday(day),
-                        'text-white': isToday(day),
-                      }
-                    )}
-                  >
-                    {format(day, 'd')}
-                    {todaysEvents.map((event) => {
-                      return (
-                        <div
-                          key={event.title}
-                          className={cn(
-                            'relative z-10 col-span-12 line-clamp-1 rounded-md bg-zinc-200 py-2 text-center text-[6px] font-bold text-gray-900 lg:line-clamp-none lg:text-sm',
-                            {
-                              'bg-red-50': event.status === 'DONE',
-                            }
-                          )}
-                        >
-                          {event.title}
-                        </div>
-                      )
-                    })}
-                  </DateBlock>
-                )
-              })}
-            </div>
-            <div className="fixed bottom-0 flex justify-center gap-2 py-4 lg:justify-end">
-              <Button
-                variant="secondary"
-                className="rounded-full py-2"
-                size="sm"
-                onClick={() => prevMonth()}
-              >
-                <ArrowLeft />
-              </Button>
-              <Button
-                variant="secondary"
-                className="rounded-full py-2"
-                size="sm"
-                onClick={() => nextMonth()}
-              >
-                <ArrowRight />
-              </Button>
-            </div>
+            <HeaderBlock items={WEEKDAYS} />
+            <AllDays
+              startingDayIndex={startingDayIndex}
+              daysInMonth={daysInMonth}
+              eventsByDate={eventsByDate}
+            />
+            <Pagination prev={() => prevMonth()} next={() => nextMonth()} />
           </div>
         </section>
       </div>
@@ -179,13 +113,99 @@ const DateBlock = ({ className, ...rest }) => {
   return (
     <>
       <motion.div
-        className={twMerge(
+        className={cn(
           'row-span-8 rounded-md border border-primary/75 p-6',
           className
         )}
         {...rest}
       />
     </>
+  )
+}
+
+const HeaderBlock = ({ items }) => {
+  return (
+    <div className="grid grid-cols-7 gap-4 pt-8">
+      {items.map((day) => {
+        return (
+          <div key={day} className="text-center font-bold">
+            {day}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+const AllDays = ({ startingDayIndex, daysInMonth, eventsByDate }) => {
+  return (
+    <div className="relative grid grid-cols-7 gap-4 pt-4">
+      {Array.from({ length: startingDayIndex }).map((_, index) => {
+        return (
+          <DateBlock
+            key={`empty-${index}`}
+            className="border-0 bg-slate-50/50 p-2 text-center"
+          />
+        )
+      })}
+      {daysInMonth.map((day, index) => {
+        const dateKey = format(day, 'yyyy-MM-dd')
+        const todaysEvents = eventsByDate[dateKey] || []
+        return (
+          <DateBlock
+            whileHover={{ scale: 1.025 }}
+            key={index}
+            className={cn(
+              'relative flex flex-col gap-2 rounded-md border p-2 font-mono text-base',
+              {
+                'bg-primary/90': isToday(day),
+                'text-white': isToday(day),
+              }
+            )}
+          >
+            {format(day, 'd')}
+            {todaysEvents.map((event) => {
+              return (
+                <div
+                  key={event.title}
+                  className={cn(
+                    'relative z-10 col-span-12 line-clamp-1 rounded-md bg-zinc-200 py-2 text-center text-[6px] font-bold text-gray-900 lg:line-clamp-none lg:text-sm',
+                    {
+                      'bg-red-50': event.status === 'DONE',
+                    }
+                  )}
+                >
+                  {event.title}
+                </div>
+              )
+            })}
+          </DateBlock>
+        )
+      })}
+    </div>
+  )
+}
+
+const Pagination = ({ next, prev }) => {
+  return (
+    <div className="fixed bottom-0 flex justify-center gap-2 py-4 lg:justify-end">
+      <Button
+        variant="secondary"
+        className="rounded-full py-2"
+        size="sm"
+        onClick={prev}
+      >
+        <ArrowLeft />
+      </Button>
+      <Button
+        variant="secondary"
+        className="rounded-full py-2"
+        size="sm"
+        onClick={next}
+      >
+        <ArrowRight />
+      </Button>
+    </div>
   )
 }
 
