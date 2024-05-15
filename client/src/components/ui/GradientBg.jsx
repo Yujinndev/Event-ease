@@ -1,4 +1,4 @@
-export default function GradientBg(op) {
+export default function GradientBg() {
   return (
     <div className="absolute inset-x-0 top-64 lg:left-24 lg:top-72">
       <div

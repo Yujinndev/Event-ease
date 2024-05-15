@@ -19,12 +19,14 @@ import CalendarView from '@/pages/event/CalendarView'
 
 import ScrollToAnchor from '@/utils/ScrollToAnchor'
 import ProtectedRoute from '@/utils/ProtectedRoute'
+import Header from '@/components/Header'
 
 function App() {
   return (
     <Router>
       <>
         <ScrollToAnchor />
+        <Header />
 
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import eventLogo from '@/assets/event-image.png'
 import heroLogo from '@/assets/hero-image.png'
 import {
@@ -10,7 +10,6 @@ import {
 import { Button } from '@/components/ui/button'
 import FeatureCard from '@/components/FeatureCard'
 import FAQ from '@/components/ui/FAQ'
-import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { Link } from 'react-router-dom'
 import GradientBg from '@/components/ui/GradientBg'
@@ -68,8 +67,6 @@ function Home() {
 
   return (
     <>
-      <Header />
-
       <div className="relative overflow-hidden">
         <GradientBg />
         <section

@@ -129,7 +129,7 @@ function Header() {
   }
 
   return (
-    <header className="min-w-screen z-50 flex justify-between border-b-[1px] md:items-center md:px-4 lg:justify-around lg:px-0">
+    <header className="min-w-screen fixed inset-x-0 top-0 z-50 flex justify-between border-b-[1px] md:items-center md:px-4 lg:justify-around lg:px-0">
       <div className="flex w-screen items-center justify-between py-3 md:w-auto md:px-4 lg:justify-around">
         <div className="brand flex gap-2 text-xl font-bold text-primary lg:text-2xl">
           <button className="md:hidden" onClick={() => handleToggleMenu()}>

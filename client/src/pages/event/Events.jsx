@@ -1,4 +1,3 @@
-import Header from '@/components/Header'
 import { useGetAllEvents } from '@/hooks/useFetchEvents'
 import { Link } from 'react-router-dom'
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
@@ -40,75 +39,72 @@ function Events() {
   }, [data, selectedFilter])
 
   return (
-    <>
-      <Header />
-      <div className="relative overflow-hidden">
-        <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
-          <div className="relative ml-auto pt-20">
-            <div className="pb-8 md:w-2/3 md:py-6 lg:w-1/2">
-              <h1 className="text-3xl font-black dark:text-white">
-                See your scheduled events
-              </h1>
+    <div className="relative overflow-hidden">
+      <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
+        <div className="relative ml-auto pt-20">
+          <div className="pb-8 md:w-2/3 md:py-6 lg:w-1/2">
+            <h1 className="text-3xl font-black dark:text-white">
+              See your scheduled events
+            </h1>
+          </div>
+
+          <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
+            <div className="flex flex-1 flex-wrap items-center justify-around gap-2 rounded-xl border p-4 py-2 md:flex-none">
+              {BUTTONS.map((btn, idx) => {
+                return (
+                  <Button
+                    onClick={() => setSelectedFilter(btn)}
+                    variant={selectedFilter === btn ? '' : 'ghost'}
+                    size="sm"
+                    className="flex-1"
+                    key={idx}
+                  >
+                    {btn}
+                  </Button>
+                )
+              })}
             </div>
-
-            <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
-              <div className="flex flex-1 flex-wrap items-center justify-around gap-2 rounded-xl border p-4 py-2 md:flex-none">
-                {BUTTONS.map((btn, idx) => {
-                  return (
-                    <Button
-                      onClick={() => setSelectedFilter(btn)}
-                      variant={selectedFilter === btn ? '' : 'ghost'}
-                      size="sm"
-                      className="flex-1"
-                      key={idx}
-                    >
-                      {btn}
-                    </Button>
-                  )
-                })}
-              </div>
-              <div className="flex justify-center gap-2">
-                <Button
-                  size="sm"
-                  className="w-max rounded-full px-3 py-5"
-                  asChild
-                >
-                  <Link to="/events/new">
-                    <Plus size={18} />
-                  </Link>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="w-max rounded-full px-6 py-5"
-                  asChild
-                >
-                  <Link to="/events/v/calendar">
-                    Calendar View <ArrowUpRight size={18} className="ms-2" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4 py-8">
-              <div className="flex items-center justify-between">
-                <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
-                  {selectedFilter} Events
-                </p>
-              </div>
-
-              {isSuccess && events.length > 0 ? (
-                <EventCard events={events} selectedFilter={selectedFilter} />
-              ) : (
-                <p className="grid place-content-center">
-                  No {selectedFilter} events
-                </p>
-              )}
+            <div className="flex justify-center gap-2">
+              <Button
+                size="sm"
+                className="w-max rounded-full px-3 py-5"
+                asChild
+              >
+                <Link to="/events/new">
+                  <Plus size={18} />
+                </Link>
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="w-max rounded-full px-6 py-5"
+                asChild
+              >
+                <Link to="/events/v/calendar">
+                  Calendar View <ArrowUpRight size={18} className="ms-2" />
+                </Link>
+              </Button>
             </div>
           </div>
-        </section>
-      </div>
-    </>
+
+          <div className="flex flex-col gap-4 py-8">
+            <div className="flex items-center justify-between">
+              <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
+                {selectedFilter} Events
+              </p>
+            </div>
+
+            {isSuccess && events.length > 0 ? (
+              <EventCard events={events} selectedFilter={selectedFilter} />
+            ) : (
+              <p className="grid place-content-center">
+                No {selectedFilter} events
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }
 

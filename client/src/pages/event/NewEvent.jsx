@@ -16,7 +16,6 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import FormError from '@/components/ui/FormError'
 import GradientBg from '@/components/ui/GradientBg'
-import Header from '@/components/Header'
 import { useQueryClient } from '@tanstack/react-query'
 import { ArrowUpLeft } from 'lucide-react'
 
@@ -78,123 +77,120 @@ function NewEvent() {
   }
 
   return (
-    <>
-      <Header />
-      <div className="relative overflow-hidden">
-        <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl md:px-14 xl:px-20">
-          <div className="relative flex min-h-screen items-center justify-center p-6 py-12">
-            <GradientBg />
-            <Card className="z-10 grid w-full gap-6 bg-background lg:w-[750px] lg:px-8 lg:py-4">
-              <CardHeader className="relative -mb-4">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="absolute -inset-x-3 -inset-y-5 flex w-max gap-x-2 rounded-full py-4 lg:-inset-x-12 lg:-inset-y-8"
-                  onClick={() => navigate(-1)}
-                >
-                  <ArrowUpLeft />
-                  <small className="hidden lg:block">Back</small>
-                </Button>
-                <CardTitle className="text-2xl">
-                  Let's create your new event!
-                </CardTitle>
-                <CardDescription>
-                  Enter your details below to create new event ..
-                </CardDescription>
-              </CardHeader>
+    <div className="relative overflow-hidden">
+      <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl md:px-14 xl:px-20">
+        <div className="relative flex min-h-screen items-center justify-center p-6 py-12">
+          <GradientBg />
+          <Card className="z-10 grid w-full gap-6 bg-background lg:w-[750px] lg:px-8 lg:py-4">
+            <CardHeader className="relative -mb-4">
+              <Button
+                size="sm"
+                variant="outline"
+                className="absolute -inset-x-3 -inset-y-5 flex w-max gap-x-2 rounded-full py-4 lg:-inset-x-12 lg:-inset-y-8"
+                onClick={() => navigate(-1)}
+              >
+                <ArrowUpLeft />
+                <small className="hidden lg:block">Back</small>
+              </Button>
+              <CardTitle className="text-2xl">
+                Let's create your new event!
+              </CardTitle>
+              <CardDescription>
+                Enter your details below to create new event ..
+              </CardDescription>
+            </CardHeader>
 
-              <CardContent>
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="grid gap-4"
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid gap-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Title" {...field} />
+                        </FormControl>
+                        <FormError errorField={form.formState.errors.title} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Category" {...field} />
+                        </FormControl>
+                        <FormError
+                          errorField={form.formState.errors.category}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="desc"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea placeholder="Description" {...field} />
+                        </FormControl>
+                        <FormError errorField={form.formState.errors.desc} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            placeholder="Date"
+                            type="datetime-local"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormError errorField={form.formState.errors.date} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Location" {...field} />
+                        </FormControl>
+                        <FormError
+                          errorField={form.formState.errors.location}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                  <FormError errorField={form.formState.errors.root} />
+                  <Button
+                    type="submit"
+                    disabled={form.formState.isSubmitting}
+                    className="w-full"
                   >
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input placeholder="Title" {...field} />
-                          </FormControl>
-                          <FormError errorField={form.formState.errors.title} />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input placeholder="Category" {...field} />
-                          </FormControl>
-                          <FormError
-                            errorField={form.formState.errors.category}
-                          />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="desc"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Textarea placeholder="Description" {...field} />
-                          </FormControl>
-                          <FormError errorField={form.formState.errors.desc} />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="date"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input
-                              placeholder="Date"
-                              type="datetime-local"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormError errorField={form.formState.errors.date} />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="location"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Input placeholder="Location" {...field} />
-                          </FormControl>
-                          <FormError
-                            errorField={form.formState.errors.location}
-                          />
-                        </FormItem>
-                      )}
-                    />
-                    <FormError errorField={form.formState.errors.root} />
-                    <Button
-                      type="submit"
-                      disabled={form.formState.isSubmitting}
-                      className="w-full"
-                    >
-                      {form.formState.isSubmitting
-                        ? 'Creating your event .. '
-                        : 'Create'}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-      </div>
-    </>
+                    {form.formState.isSubmitting
+                      ? 'Creating your event .. '
+                      : 'Create'}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    </div>
   )
 }
 
