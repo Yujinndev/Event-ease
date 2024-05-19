@@ -1,4 +1,5 @@
 import Header from '@/components/Header'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useGetAllEvents } from '@/hooks/useFetchEvents'
 import { cn } from '@/lib/utils'
@@ -9,6 +10,7 @@ import {
   format,
   getDay,
   isToday,
+  isWithinInterval,
   startOfMonth,
   subMonths,
 } from 'date-fns'
@@ -60,18 +62,33 @@ const CalendarView = () => {
     )
   }, [events])
 
+  // Get event count for the current month
+  const eventCountForCurrentMonth = useMemo(() => {
+    if (!isSuccess) return 0
+
+    return events.filter((event) =>
+      isWithinInterval(new Date(event.date), {
+        start: firstDayOfMonth,
+        end: lastDayOfMonth,
+      })
+    ).length
+  }, [events, isSuccess, firstDayOfMonth, lastDayOfMonth])
+
   const startingDayIndex = getDay(firstDayOfMonth)
 
   return (
     <>
       <Header />
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-auto bg-grid-black/[0.035]">
         <section className="mx-auto my-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
           <div className="relative ml-auto pt-20">
-            <div className="pb-8 md:w-2/3 md:py-6 lg:w-1/2">
+            <div className="relative flex w-max pb-8 md:py-6">
               <h1 className="text-3xl font-black dark:text-white">
                 Events for {format(currentMonth, 'MMMM yyyy')}
               </h1>
+              <Badge className="absolute -right-8 bg-amber-400 text-black">
+                {eventCountForCurrentMonth}
+              </Badge>
             </div>
             <div className="flex items-center justify-center gap-2 lg:justify-end">
               <Button
@@ -114,7 +131,7 @@ const DateBlock = ({ className, ...rest }) => {
     <>
       <motion.div
         className={cn(
-          'row-span-8 rounded-md border border-primary/75 p-6',
+          'cols-spmrounded-md row-span-8 border border-primary/75 bg-white p-6',
           className
         )}
         {...rest}
@@ -125,7 +142,7 @@ const DateBlock = ({ className, ...rest }) => {
 
 const HeaderBlock = ({ items }) => {
   return (
-    <div className="grid grid-cols-7 gap-4 pt-8">
+    <div className="hidden grid-cols-7 gap-4 pt-8 lg:grid">
       {items.map((day) => {
         return (
           <div key={day} className="text-center font-bold">
@@ -139,12 +156,12 @@ const HeaderBlock = ({ items }) => {
 
 const AllDays = ({ startingDayIndex, daysInMonth, eventsByDate }) => {
   return (
-    <div className="relative grid grid-cols-7 gap-4 pt-4">
+    <div className="relative grid grid-cols-2 gap-4 pt-4 lg:grid-cols-7">
       {Array.from({ length: startingDayIndex }).map((_, index) => {
         return (
           <DateBlock
             key={`empty-${index}`}
-            className="border-0 bg-slate-50/50 p-2 text-center"
+            className="hidden border-0 bg-slate-50/50 p-2 text-center lg:block"
           />
         )
       })}
@@ -153,30 +170,33 @@ const AllDays = ({ startingDayIndex, daysInMonth, eventsByDate }) => {
         const todaysEvents = eventsByDate[dateKey] || []
         return (
           <DateBlock
-            whileHover={{ scale: 1.025 }}
             key={index}
             className={cn(
-              'relative flex flex-col gap-2 rounded-md border p-2 font-mono text-base',
+              'group relative flex flex-col gap-2 rounded-md border p-2 font-mono text-base',
               {
                 'bg-primary/90': isToday(day),
                 'text-white': isToday(day),
               }
             )}
           >
-            {format(day, 'd')}
+            <p className="text-gray-400 lg:hidden">{format(day, 'EEE')}</p>
+            <p className="-mt-2 font-bold lg:mt-0 lg:font-normal">
+              {format(day, 'd')}
+            </p>
             {todaysEvents.map((event) => {
               return (
-                <div
+                <Link
+                  to={`/events/detail/${event.id}`}
                   key={event.title}
                   className={cn(
-                    'relative z-10 col-span-12 line-clamp-1 rounded-md bg-zinc-200 py-2 text-center text-[6px] font-bold text-gray-900 lg:line-clamp-none lg:text-sm',
+                    'relative left-5 z-10 col-span-12 rounded-md bg-amber-400 py-2 text-center text-sm font-bold text-gray-900 group-hover:bg-amber-200 lg:line-clamp-none',
                     {
-                      'bg-red-50': event.status === 'DONE',
+                      'bg-red-700 text-white': event.status === 'DONE',
                     }
                   )}
                 >
                   {event.title}
-                </div>
+                </Link>
               )
             })}
           </DateBlock>
@@ -188,7 +208,7 @@ const AllDays = ({ startingDayIndex, daysInMonth, eventsByDate }) => {
 
 const Pagination = ({ next, prev }) => {
   return (
-    <div className="fixed bottom-0 flex justify-center gap-2 py-4 lg:justify-end">
+    <div className="fixed bottom-0 right-10 flex justify-center gap-2 py-4 lg:right-32 lg:justify-end xl:right-44">
       <Button
         variant="secondary"
         className="rounded-full py-2"

@@ -77,7 +77,9 @@ function Home() {
             <div className="gap-12 md:flex md:items-center">
               <div className="text-center sm:px-12 md:w-2/3 md:px-0 md:text-left lg:w-1/2">
                 <h1 className="text-5xl font-black dark:text-white md:text-6xl lg:text-6xl xl:text-7xl">
-                  Making events simple and effortless.
+                  Making events{' '}
+                  <b className="brand leading-relaxed text-primary">‘SIMPLE</b>{' '}
+                  and <b className="brand text-primary">EFFORTLESS‘</b>
                 </h1>
                 <div>
                   <p className="mt-8 text-lg text-gray-700 dark:text-gray-100">

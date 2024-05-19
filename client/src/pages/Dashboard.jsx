@@ -32,8 +32,8 @@ function Dashboard() {
   const recentEvents = userEvents?.filter((el) => el.status === 'DONE')
 
   return (
-    <div className="relative overflow-hidden">
-      <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
+    <div className="bg-grid-black/[0.035] relative overflow-hidden">
+      <section className="mx-auto my-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
         <div className="relative ml-auto py-20">
           <div className="gap-12">
             <div className="pb-8 md:w-2/3 md:py-12 lg:w-1/2">
@@ -41,7 +41,7 @@ function Dashboard() {
                 Hello, {loggedUser?.user?.firstname}!
               </h1>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 p-4">
               <div className="flex items-center justify-between">
                 <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
                   Upcoming Events
@@ -98,10 +98,12 @@ function Dashboard() {
                   })}
                 </div>
               ) : (
-                <p className="grid place-content-center">No upcoming events</p>
+                <p className="grid place-content-center text-base">
+                  No upcoming events
+                </p>
               )}
             </div>
-            <div className="ml-auto flex flex-col gap-4 pt-20">
+            <div className="ml-auto mt-20 flex flex-col gap-4 rounded-md border bg-white p-4">
               <div className="flex items-center justify-between">
                 <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
                   Recent Events
@@ -177,7 +179,8 @@ function Dashboard() {
                 </Table>
               </div>
             </div>
-            <div className="ml-auto flex flex-col gap-4 pt-20">
+
+            <div className="ml-auto mt-20 flex flex-col gap-4 rounded-md border bg-white p-4">
               <div className="flex items-center justify-between">
                 <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
                   Recent Transactions

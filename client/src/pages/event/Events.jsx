@@ -39,8 +39,8 @@ function Events() {
   }, [data, selectedFilter])
 
   return (
-    <div className="relative overflow-hidden">
-      <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
+    <div className="bg-grid-black/[0.035] relative overflow-hidden">
+      <section className="mx-auto my-4 min-h-[98dvh] max-w-screen-2xl px-8 md:px-14 lg:mb-0 xl:px-20">
         <div className="relative ml-auto pt-20">
           <div className="pb-8 md:w-2/3 md:py-6 lg:w-1/2">
             <h1 className="text-3xl font-black dark:text-white">
@@ -49,7 +49,7 @@ function Events() {
           </div>
 
           <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
-            <div className="flex flex-1 flex-wrap items-center justify-around gap-2 rounded-xl border p-4 py-2 md:flex-none">
+            <div className="flex flex-1 flex-wrap items-center justify-around gap-2 rounded-xl border bg-white p-4 py-2 md:flex-none">
               {BUTTONS.map((btn, idx) => {
                 return (
                   <Button
@@ -119,7 +119,7 @@ const EventCard = ({ events, selectedFilter }) => {
             key={el.id}
             whileHover={{ scale: 1.015 }}
             whileTap={{ scale: 0.95 }}
-            className="relative h-1 flex-1 transition-all ease-linear"
+            className="relative h-1 flex-1 bg-white transition-all ease-linear"
           >
             <Link to={`/events/detail/${el.id}`}>
               <Suspense fallback={<SkeletonCard />}>
@@ -147,7 +147,7 @@ const EventCard = ({ events, selectedFilter }) => {
                       <p className="line-clamp-1 text-[17px] font-bold dark:text-gray-300">
                         {el.title}
                       </p>
-                      <p className="line-clamp-1 text-[14px]">{el.desc}</p>
+                      <p className="mt-1 line-clamp-1 text-[14px]">{el.desc}</p>
                       <div className="flex flex-wrap gap-x-4">
                         <div className="mt-2 flex items-center gap-2 font-mono text-lg">
                           <Clock8 size={18} />

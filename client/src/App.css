@@ -40,7 +40,6 @@ header {
 }
 
 .brand {
-  font:
-    700 20px 'Añejo',
-    sans-serif;
+  font-family: 'Añejo', sans-serif;
+  letter-spacing: 2px;
 }
