@@ -13,9 +13,10 @@ import Register from '@/pages/Register'
 import Dashboard from '@/pages/Dashboard'
 import Events from '@/pages/event/Events'
 import EventDetail from './pages/event/EventDetail'
-import Finances from '@/pages/Finances'
 import NewEvent from '@/pages/event/NewEvent'
 import CalendarView from '@/pages/event/CalendarView'
+import Finances from '@/pages/finance/Finances'
+import NewTransaction from '@/pages/finance/NewTransaction'
 
 import ScrollToAnchor from '@/utils/ScrollToAnchor'
 import ProtectedRoute from '@/utils/ProtectedRoute'
@@ -42,7 +43,10 @@ function App() {
               <Route path="events/v/calendar" element={<CalendarView />} />
             </Route>
 
-            <Route path="/finances" element={<Finances />} />
+            <Route path="/" element={<Outlet />}>
+              <Route path="finances" element={<Finances />} />
+              <Route path="finances/new" element={<NewTransaction />} />
+            </Route>
           </Route>
         </Routes>
       </>
