@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
+import { Resend } from 'resend'
 
 const prisma = new PrismaClient()
 
@@ -102,6 +103,24 @@ export const updateEvent = async (req: Request, res: Response) => {
     })
 
     res.status(200).json({ updatedEvent })
+  } catch (error) {
+    res.status(500).json({ error: `Internal server error && ${error}` })
+  }
+}
+
+export const sendEmailToGuest = async (req: Request, res: Response) => {
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const { title, email } = req.body
+
+  try {
+    resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: `Invitation of ${title}`,
+      html: `<p>You are invited to <strong>${title}</strong>!</p>`,
+    })
+
+    res.status(200).json({ message: 'Email Sent!' })
   } catch (error) {
     res.status(500).json({ error: `Internal server error && ${error}` })
   }
