@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   createNewEvent,
+  deleteEvent,
   getAllEvents,
   getEventFullDetails,
   updateEvent,
@@ -13,6 +14,7 @@ export const eventRouter = () => {
   router.get('/details/:id', getEventFullDetails)
   router.post('/create', createNewEvent)
   router.post('/update', updateEvent)
+  router.post('/delete', deleteEvent)
 
   return router
 }

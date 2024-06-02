@@ -8,6 +8,7 @@ import LoadingPage from '@/components/LoadingPage'
 import GradientBg from '@/components/ui/GradientBg'
 import EventOverview from '@/components/events/EventOverview'
 import EventGuests from '@/components/events/EventGuests'
+import More from '@/components/events/More'
 
 function EventDetail() {
   const { id } = useParams()
@@ -17,22 +18,17 @@ function EventDetail() {
     {
       title: 'Overview',
       value: 'overview',
-      content: <EventOverview data={data} />,
+      content: <EventOverview id={id} />,
     },
     {
       title: 'Guests',
       value: 'guests',
-      content: <EventGuests data={data} />,
-    },
-    {
-      title: 'Finances',
-      value: 'finances',
-      content: <div>Finances</div>,
+      content: <EventGuests id={id} />,
     },
     {
       title: 'More',
       value: 'more',
-      content: <div>More</div>,
+      content: <More id={id} />,
     },
   ]
 

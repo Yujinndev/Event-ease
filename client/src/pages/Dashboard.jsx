@@ -18,11 +18,16 @@ import {
 import { Button } from '@/components/ui/button'
 import { SkeletonCard } from '@/components/ui/SkeletonEventCard'
 import { Badge } from '@/components/ui/badge'
+import { useGetAllFinances } from '@/hooks/useFetchFinance'
+import { Activity, CreditCard, DollarSign, ShoppingCart } from 'lucide-react'
 
 function Dashboard() {
   const auth = useAuthStore.getState().user
   const { data: loggedUser } = useUserDetails(auth)
-  const { data: userEvents, isSuccess } = useGetAllEvents()
+  const { data: userEvents, isSuccess: eventsSuccess } = useGetAllEvents()
+  const { data: userTransactions, isSuccess: transactionSuccess } =
+    useGetAllFinances()
+
   const currentDate = Date.now()
 
   const upcomingEvents = userEvents?.filter(
@@ -32,12 +37,12 @@ function Dashboard() {
   const recentEvents = userEvents?.filter((el) => el.status === 'DONE')
 
   return (
-    <div className="bg-grid-black/[0.035] relative overflow-hidden">
+    <div className="relative overflow-hidden bg-grid-black/[0.035]">
       <section className="mx-auto my-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
-        <div className="relative ml-auto py-20">
+        <div className="relative ml-auto py-14">
           <div className="gap-12">
             <div className="pb-8 md:w-2/3 md:py-12 lg:w-1/2">
-              <h1 className="text-5xl font-black dark:text-white md:text-4xl lg:text-5xl xl:text-6xl">
+              <h1 className="px-4 text-5xl font-black dark:text-white md:text-4xl lg:text-5xl xl:text-6xl">
                 Hello, {loggedUser?.user?.firstname}!
               </h1>
             </div>
@@ -54,8 +59,8 @@ function Dashboard() {
                 </Link>
               </div>
 
-              {isSuccess && upcomingEvents.length > 0 ? (
-                <div className="overflow flex flex-col gap-2 md:flex-row lg:flex-wrap">
+              {eventsSuccess && upcomingEvents.length > 0 ? (
+                <div className="overflow flex flex-col gap-3 md:flex-row lg:flex-wrap">
                   {upcomingEvents.map((events) => {
                     const convertDate = new Date(events.date)
 
@@ -128,23 +133,23 @@ function Dashboard() {
                       <TableHead></TableHead>
                     </TableRow>
                   </TableHeader>
-                  {isSuccess && recentEvents.length > 0 ? (
+                  {eventsSuccess && recentEvents.length > 0 ? (
                     <TableBody>
                       {recentEvents.map((events) => {
-                        const convertDate = new Date(events.date)
-                        const formattedDate = format(
-                          convertDate,
-                          'MMMM d, yyyy - HH:mm'
-                        )
                         return (
-                          <TableRow key={events.id} className="bg-primary/10">
-                            <TableCell className="text-sm font-bold md:text-base">
+                          <TableRow key={events.id}>
+                            <TableCell className="text-sm font-semibold md:text-[14px]">
                               {events.title}
                             </TableCell>
                             <TableCell className="hidden lg:table-cell">
                               {events.location}
                             </TableCell>
-                            <TableCell>{formattedDate}</TableCell>
+                            <TableCell className="hidden lg:table-cell">
+                              <Badge className="text-xs">
+                                {format(new Date(events.date), 'PPp')}
+                              </Badge>
+                            </TableCell>
+
                             <TableCell className="hidden lg:table-cell">
                               {events.category}
                             </TableCell>
@@ -181,50 +186,82 @@ function Dashboard() {
             </div>
 
             <div className="ml-auto mt-20 flex flex-col gap-4 rounded-md border bg-white p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
-                  Recent Transactions
-                </p>
-                <Link
-                  to="/events"
-                  className="text-[14px] text-blue-500 underline underline-offset-4 dark:text-gray-300 md:text-sm"
-                >
-                  See All
-                </Link>
-              </div>
+              <p className="text-[17px] font-bold dark:text-gray-300 md:text-xl">
+                Recent Transactions
+              </p>
 
               <div className="overflow flex flex-col gap-2 rounded-xl lg:flex-row">
                 <Table>
                   <TableHeader className="bg-primary">
                     <TableRow>
                       <TableHead className="text-white">Type</TableHead>
+                      <TableHead className="text-white">Name</TableHead>
                       <TableHead className="hidden text-white lg:table-cell">
                         Description
                       </TableHead>
-                      <TableHead className="text-white">Date time</TableHead>
-                      <TableHead className="text-white">Amount</TableHead>
                       <TableHead className="hidden text-white lg:table-cell">
-                        Running Balance
+                        Date of Transaction
                       </TableHead>
-                      <TableHead></TableHead>
+                      <TableHead className="text-white">Amount</TableHead>
                     </TableRow>
                   </TableHeader>
-
-                  <TableBody>
-                    <TableRow className="bg-primaryy/10">
-                      <TableCell className="font-medium"></TableCell>
-                      <TableCell className="hidden lg:table-cell"></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell className="text-right"></TableCell>
-                    </TableRow>
-                  </TableBody>
-                  <TableCaption>
-                    <p className="grid place-content-center text-base text-black">
-                      No recent Transactions
-                    </p>
-                  </TableCaption>
+                  {transactionSuccess && userTransactions.length > 0 ? (
+                    <TableBody>
+                      {userTransactions.map((transaction) => (
+                        <TableRow key={transaction.id}>
+                          <TableCell>
+                            <Button
+                              className="h-12 w-12 rounded-full"
+                              variant={
+                                transaction.type == 'EXPENSE'
+                                  ? 'destructive'
+                                  : ''
+                              }
+                            >
+                              {(() => {
+                                switch (transaction.type) {
+                                  case 'INCOME':
+                                    return <DollarSign />
+                                  case 'EXPENSE':
+                                    return <ShoppingCart />
+                                  case 'SAVINGS':
+                                    return <CreditCard />
+                                  case 'INVESTMENT':
+                                    return <Activity />
+                                  default:
+                                    return null
+                                }
+                              })()}
+                            </Button>
+                          </TableCell>
+                          <TableCell className="text-sm font-semibold md:text-[14px]">
+                            {transaction.name}
+                          </TableCell>
+                          <TableCell className="line-clamp-1 hidden lg:table-cell">
+                            {transaction.description}
+                          </TableCell>
+                          <TableCell className="hidden lg:table-cell">
+                            <Badge className="text-xs">
+                              {format(new Date(transaction.dateTransac), 'PPp')}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {new Intl.NumberFormat('fil-PH', {
+                              style: 'currency',
+                              currency: 'PHP',
+                              maximumFractionDigits: 2,
+                            }).format(parseInt(transaction.amount))}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  ) : (
+                    <TableCaption>
+                      <p className="grid place-content-center text-base text-black">
+                        No recent Transactions
+                      </p>
+                    </TableCaption>
+                  )}
                 </Table>
               </div>
             </div>

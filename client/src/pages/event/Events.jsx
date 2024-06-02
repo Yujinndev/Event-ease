@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ArrowUpRight, Clock8, MapPin, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Pagination from '@/components/ui/pagination'
 
 const BUTTONS = ['Upcoming', 'Pending', 'Recent', 'Cancelled']
 
@@ -32,34 +33,67 @@ function Events() {
     } else if (selectedFilter === 'Recent') {
       setEvents(data.filter((el) => el.status === 'DONE'))
     } else if (selectedFilter === 'Cancelled') {
-      setEvents(data.filter((el) => el.status === 'CANCELLED'))
+      setEvents(data.filter((el) => el.status === 'CANCELED'))
     } else {
       setEvents([])
     }
   }, [data, selectedFilter])
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 3
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(events.length / itemsPerPage)
+
+  // Calculate the items for the current page
+  const startIdx = (currentPage - 1) * itemsPerPage
+  const currentItems = events.slice(startIdx, startIdx + itemsPerPage)
+
   return (
-    <div className="bg-grid-black/[0.035] relative overflow-hidden">
+    <div className="relative overflow-hidden bg-grid-black/[0.035]">
       <section className="mx-auto my-4 min-h-[98dvh] max-w-screen-2xl px-8 md:px-14 lg:mb-0 xl:px-20">
         <div className="relative ml-auto pt-20">
-          <div className="pb-8 md:w-2/3 md:py-6 lg:w-1/2">
+          <div className="pb-6 md:w-2/3 md:py-6 lg:w-1/2">
             <h1 className="text-3xl font-black dark:text-white">
               See your scheduled events
             </h1>
           </div>
 
           <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
-            <div className="flex flex-1 flex-wrap items-center justify-around gap-2 rounded-xl border bg-white p-4 py-2 md:flex-none">
+            <div className="flex flex-1 items-center justify-around gap-2 rounded-xl border bg-white p-4 py-2 md:flex-none lg:flex-wrap">
               {BUTTONS.map((btn, idx) => {
                 return (
                   <Button
-                    onClick={() => setSelectedFilter(btn)}
-                    variant={selectedFilter === btn ? '' : 'ghost'}
-                    size="sm"
-                    className="flex-1"
                     key={idx}
+                    onClick={() => setSelectedFilter(btn)}
+                    variant="ghost"
+                    size="sm"
+                    className="relative flex-1 p-4 py-2 text-sm"
+                    style={{
+                      transformStyle: 'preserve-3d',
+                    }}
                   >
-                    {btn}
+                    <span
+                      className={cn(
+                        'relative z-50 block text-black dark:text-white',
+                        {
+                          'text-white': selectedFilter === btn,
+                        }
+                      )}
+                    >
+                      {btn}
+                    </span>
+                    {selectedFilter === btn && (
+                      <motion.div
+                        layoutId="clickedbutton"
+                        transition={{
+                          type: 'spring',
+                          bounce: 0.25,
+                          duration: 0.75,
+                        }}
+                        className="absolute inset-0 z-10 rounded-md bg-primary dark:bg-zinc-800"
+                      />
+                    )}
                   </Button>
                 )
               })}
@@ -95,22 +129,33 @@ function Events() {
             </div>
 
             {isSuccess && events.length > 0 ? (
-              <EventCard events={events} selectedFilter={selectedFilter} />
+              <EventList
+                events={currentItems}
+                selectedFilter={selectedFilter}
+              />
             ) : (
               <p className="grid place-content-center">
                 No {selectedFilter} events
               </p>
             )}
           </div>
+
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          )}
         </div>
       </section>
     </div>
   )
 }
 
-const EventCard = ({ events, selectedFilter }) => {
+const EventList = ({ events, selectedFilter }) => {
   return (
-    <div className="overflow flex flex-col gap-2">
+    <div className="overflow flex flex-col gap-4">
       {events.map((el) => {
         const convertDate = new Date(el.date)
 
@@ -148,12 +193,12 @@ const EventCard = ({ events, selectedFilter }) => {
                         {el.title}
                       </p>
                       <p className="mt-1 line-clamp-1 text-[14px]">{el.desc}</p>
-                      <div className="flex flex-wrap gap-x-4">
-                        <div className="mt-2 flex items-center gap-2 font-mono text-lg">
+                      <div className="flex flex-col flex-wrap gap-x-4 lg:flex-row">
+                        <div className="mt-1 flex items-center gap-2 font-mono text-lg lg:mt-2">
                           <Clock8 size={18} />
                           <small>{format(convertDate, 'HH:mm')}</small>
                         </div>
-                        <div className="mt-2 flex items-center gap-2 font-mono text-lg">
+                        <div className="flex items-center gap-2 font-mono text-lg lg:mt-2">
                           <MapPin size={18} className="flex-shrink-0" />
                           <small className="line-clamp-1">{el.location}</small>
                         </div>

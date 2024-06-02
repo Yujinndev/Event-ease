@@ -82,34 +82,36 @@ const CalendarView = () => {
       <div className="relative overflow-auto bg-grid-black/[0.035]">
         <section className="mx-auto my-4 min-h-[90vh] max-w-screen-2xl px-8 md:px-14 xl:px-20">
           <div className="relative ml-auto pt-20">
-            <div className="relative flex w-max pb-8 md:py-6">
-              <h1 className="text-3xl font-black dark:text-white">
-                Events for {format(currentMonth, 'MMMM yyyy')}
-              </h1>
-              <Badge className="absolute -right-8 bg-amber-400 text-black">
-                {eventCountForCurrentMonth}
-              </Badge>
-            </div>
-            <div className="flex items-center justify-center gap-2 lg:justify-end">
-              <Button
-                size="sm"
-                className="w-max rounded-full px-3 py-5"
-                asChild
-              >
-                <Link to="/events/new">
-                  <Plus size={18} />
-                </Link>
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="w-max rounded-full px-6 py-5"
-                asChild
-              >
-                <Link to="/events">
-                  Card View <ArrowUpRight size={18} className="ms-2" />
-                </Link>
-              </Button>
+            <div className="flex flex-col justify-between gap-4 pb-8 lg:w-full lg:flex-row lg:py-4">
+              <div className="relative w-max">
+                <h1 className="text-3xl font-black dark:text-white">
+                  Events for {format(currentMonth, 'MMMM yyyy')}
+                </h1>
+                <Badge className="absolute -right-10 top-0 bg-gray-700">
+                  {eventCountForCurrentMonth}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-center gap-2 lg:justify-end">
+                <Button
+                  size="sm"
+                  className="w-max rounded-full px-3 py-5"
+                  asChild
+                >
+                  <Link to="/events/new">
+                    <Plus size={18} />
+                  </Link>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="w-max rounded-full px-6 py-5"
+                  asChild
+                >
+                  <Link to="/events">
+                    List View <ArrowUpRight size={18} className="ms-2" />
+                  </Link>
+                </Button>
+              </div>
             </div>
 
             <HeaderBlock items={WEEKDAYS} />
@@ -118,7 +120,10 @@ const CalendarView = () => {
               daysInMonth={daysInMonth}
               eventsByDate={eventsByDate}
             />
-            <Pagination prev={() => prevMonth()} next={() => nextMonth()} />
+            <MonthPagination
+              prev={() => prevMonth()}
+              next={() => nextMonth()}
+            />
           </div>
         </section>
       </div>
@@ -131,7 +136,7 @@ const DateBlock = ({ className, ...rest }) => {
     <>
       <motion.div
         className={cn(
-          'cols-spmrounded-md row-span-8 border border-primary/75 bg-white p-6',
+          'cols-spmrounded-md row-span-9 border border-primary/75 bg-white p-6',
           className
         )}
         {...rest}
@@ -172,7 +177,7 @@ const AllDays = ({ startingDayIndex, daysInMonth, eventsByDate }) => {
           <DateBlock
             key={index}
             className={cn(
-              'group relative flex flex-col gap-2 rounded-md border p-2 font-mono text-base',
+              'relative flex flex-col gap-2 rounded-md border p-2 font-mono text-base',
               {
                 'bg-primary/90': isToday(day),
                 'text-white': isToday(day),
@@ -189,13 +194,15 @@ const AllDays = ({ startingDayIndex, daysInMonth, eventsByDate }) => {
                   to={`/events/detail/${event.id}`}
                   key={event.title}
                   className={cn(
-                    'relative left-5 z-10 col-span-12 rounded-md bg-amber-400 py-2 text-center text-sm font-bold text-gray-900 group-hover:bg-amber-200 lg:line-clamp-none',
+                    'relative left-5 z-10 col-span-12 rounded-md bg-red-700 px-4 py-2 text-center text-xs font-bold text-white hover:bg-red-400 lg:line-clamp-none lg:text-left',
                     {
-                      'bg-red-700 text-white': event.status === 'DONE',
+                      'bg-gray-700 hover:bg-gray-500':
+                        event.status === 'UPCOMING',
                     }
                   )}
                 >
-                  {event.title}
+                  <p>{event.title}</p>
+                  <p className="mt-1">{format(event.date, 'hh:mm a')}</p>
                 </Link>
               )
             })}
@@ -206,7 +213,7 @@ const AllDays = ({ startingDayIndex, daysInMonth, eventsByDate }) => {
   )
 }
 
-const Pagination = ({ next, prev }) => {
+const MonthPagination = ({ next, prev }) => {
   return (
     <div className="fixed bottom-0 right-10 flex justify-center gap-2 py-4 lg:right-32 lg:justify-end xl:right-44">
       <Button

@@ -78,6 +78,7 @@ export const createNewEvent = async (req: Request, res: Response) => {
     res.status(500).json({ error: `Internal server error && ${error}` })
   }
 }
+
 export const updateEvent = async (req: Request, res: Response) => {
   const { eventId, title, category, desc, date, location, userID, status } =
     req.body
@@ -103,6 +104,33 @@ export const updateEvent = async (req: Request, res: Response) => {
     })
 
     res.status(200).json({ updatedEvent })
+  } catch (error) {
+    res.status(500).json({ error: `Internal server error && ${error}` })
+  }
+}
+
+export const deleteEvent = async (req: Request, res: Response) => {
+  const { eventId, userID } = req.body
+
+  if (!userID) {
+    return res.status(400).json({ error: 'User ID is required' })
+  }
+
+  try {
+    const deletedEvent = await prisma.event.delete({
+      where: { id: eventId },
+    })
+
+    const allEvents = await prisma.event.findMany({
+      orderBy: {
+        date: 'asc',
+      },
+      where: {
+        organizerId: userID,
+      },
+    })
+
+    res.status(200).json({ allEvents })
   } catch (error) {
     res.status(500).json({ error: `Internal server error && ${error}` })
   }

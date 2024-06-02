@@ -1,34 +1,45 @@
 import React from 'react'
-import { Clock8, MapPin } from 'lucide-react'
+import { Clock8, MapPin, Plus } from 'lucide-react'
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '../ui/button'
 
-const EventGuests = ({ data }) => {
-  const convertDate = new Date(data.date)
-  const formattedDate = format(convertDate, 'MMMM d, yyyy - HH:mm')
+const MEMBERS = [
+  {
+    name: 'Mark Eugene Laysa',
+  },
+  {
+    name: 'Vhince Cedrick Afroilan',
+  },
+  {
+    name: 'Jovan Dela Cerna',
+  },
+]
 
+const EventGuests = ({ id }) => {
   return (
     <div className="relative ml-auto">
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="flex flex-col gap-4">
-          <Card className="relative p-4">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSZHgjV8ckMtH2AEwV7Q63QFOFZoVDKDy24MVx_9NVPA&s"
-              alt="Example Image"
-              className="w-full rounded-lg"
-            />
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Card className="relative flex flex-col items-center justify-center gap-4 p-4">
+          <Button className="h-20 w-20 rounded-full" variant="outline">
+            <Plus size={40} />
+          </Button>
 
-            <CardContent className="absolute -mt-20 flex items-center gap-2">
-              <div className="flex flex-col items-center justify-center rounded-sm border bg-white px-4 py-2">
-                <p className="-mb-1 text-sm">{format(convertDate, 'MMM')}</p>
-                <p className="mb-0 text-xl font-black">
-                  {format(convertDate, 'dd')}
-                </p>
-              </div>
-            </CardContent>
+          <p className="text-base">Invite Guests</p>
+        </Card>
+        {MEMBERS.map((item) => (
+          <Card
+            key={item.name}
+            className="relative flex flex-col items-center gap-4 p-4"
+          >
+            <img
+              src="https://github.com/shadcn.png"
+              className="w-full rounded-lg lg:h-40"
+            />
+            <p className="text-center text-base font-bold">{item.name}</p>
           </Card>
-        </div>
+        ))}
       </div>
     </div>
   )

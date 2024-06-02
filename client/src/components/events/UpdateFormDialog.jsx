@@ -21,22 +21,21 @@ import {
 import { Button } from '@/components/ui/button'
 import { eventSchema } from '@/pages/event/NewEvent'
 import axios from '@/lib/axios'
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import FormError from '@/components/ui/FormError'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { useState } from 'react'
+import { Card } from '../ui/card'
+import { PenSquareIcon } from 'lucide-react'
 
 function UpdateFormDialog({ data }) {
   const eventId = data.id
   const convertDate = new Date(data.date)
   const formattedDate = format(convertDate, 'yyyy-MM-dd HH:mm')
-
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -66,24 +65,29 @@ function UpdateFormDialog({ data }) {
         date: convertDate,
         location: data.location,
       })
-
-      queryClient.invalidateQueries(['events'])
-      setIsOpen(false)
     } catch (error) {
       const message = error?.response?.data?.error
       form.setError('root', { message: message })
     }
   }
 
+  const { mutateAsync: UpdateEvent } = useMutation({
+    mutationFn: onSubmit,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['event', eventId] })
+      setIsOpen(false)
+    },
+  })
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-32 rounded-full">
-          Edit
+        <Button className="flex w-full justify-between gap-4 p-8 py-12 text-base">
+          Edit and Update the Information
+          <PenSquareIcon />
         </Button>
       </DialogTrigger>
-      <Button className="w-32 rounded-full">Change Cover</Button>
-      <DialogContent className="bg-background sm:max-w-[425px] lg:max-w-[725px]">
+      <DialogContent className="bg-background p-8 sm:max-w-[425px] lg:max-w-[850px]">
         <DialogHeader>
           <DialogTitle>Edit event</DialogTitle>
           <DialogDescription>
@@ -91,7 +95,10 @@ function UpdateFormDialog({ data }) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+          <form
+            onSubmit={form.handleSubmit(UpdateEvent)}
+            className="grid gap-4"
+          >
             <FormField
               control={form.control}
               name="title"

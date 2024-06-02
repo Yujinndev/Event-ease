@@ -134,9 +134,9 @@ export default function SignIn() {
                 </Button>
               </form>
             </Form>
-            <Button variant="outline" className="mt-2 w-full">
+            {/* <Button variant="outline" className="mt-2 w-full">
               Login with Google
-            </Button>
+            </Button> */}
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{' '}
               <Link to="/register" className="underline">

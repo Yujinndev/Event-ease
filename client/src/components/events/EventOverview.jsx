@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Clock8, MapPin } from 'lucide-react'
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import UpdateFormDialog from '@/components/events/UpdateFormDialog'
+import { useGetEventById } from '@/hooks/useFetchEvents'
 
-const EventOverview = ({ data }) => {
+const EventOverview = ({ id }) => {
+  const { data } = useGetEventById(id)
   const convertDate = new Date(data.date)
-  const formattedDate = format(convertDate, 'MMMM d, yyyy - HH:mm')
+  const formattedDate = format(convertDate, 'PPp')
 
   return (
     <div className="relative ml-auto">
@@ -28,18 +30,14 @@ const EventOverview = ({ data }) => {
                 </p>
               </div>
             </CardContent>
-
-            <CardContent className="flex justify-center gap-2 pt-4 lg:justify-end">
-              <UpdateFormDialog data={data} />
-            </CardContent>
           </Card>
 
           <Card>
             <CardContent className="flex flex-col gap-2 p-8">
               <h1 className="text-xl font-black">Timeline:</h1>
-              <div className="ms-6 flex items-center gap-4 font-mono text-lg">
+              <div className="ms-6 flex items-center gap-4 font-mono text-base lg:text-lg">
                 <Clock8 size={24} className="flex-shrink-0" />
-                {formattedDate}{' '}
+                <p className="line-clamp-3">{formattedDate}</p>
                 <Badge
                   variant={data.status === 'UPCOMING' ? '' : 'destructive'}
                   className="w-max"
@@ -47,9 +45,9 @@ const EventOverview = ({ data }) => {
                   {data.status}
                 </Badge>
               </div>
-              <div className="ms-6 flex items-center gap-4 font-mono text-lg">
-                <MapPin size={24} />
-                {data.location}
+              <div className="ms-6 flex items-center gap-4 font-mono text-base lg:text-lg">
+                <MapPin size={24} className="flex-shrink-0" />
+                <p className="line-clamp-3">{data.location}</p>
               </div>
             </CardContent>
           </Card>
@@ -59,7 +57,9 @@ const EventOverview = ({ data }) => {
           <CardContent className="flex flex-col gap-2 p-8">
             <div>
               <h1 className="text-xl font-black">Description:</h1>
-              <p className="ms-8 text-justify text-xl">{data.desc}</p>
+              <p className="ms-8 text-lg lg:text-justify lg:text-xl">
+                {data.desc}
+              </p>
             </div>
           </CardContent>
         </Card>

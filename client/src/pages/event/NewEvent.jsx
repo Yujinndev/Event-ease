@@ -1,8 +1,11 @@
-import axios from '@/lib/axios'
+import { useState } from 'react'
 import { z } from 'zod'
+import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ArrowUpLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -12,35 +15,44 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import FormError from '@/components/ui/FormError'
 import GradientBg from '@/components/ui/GradientBg'
-import { useQueryClient } from '@tanstack/react-query'
-import { ArrowUpLeft } from 'lucide-react'
+import FormError from '@/components/ui/FormError'
+import Geoapify from '@/components/ui/Geoapify'
+import axios from '@/lib/axios'
+import { cn } from '@/lib/utils'
 
 export const eventSchema = z.object({
-  title: z.string().min(3, {
-    message: 'Title is Required',
-  }),
-  category: z.string().min(3, {
-    message: 'Category is Required',
-  }),
-  desc: z.string().min(10, {
-    message: 'Description should be at least 10 characters',
-  }),
-  date: z.coerce.date({ message: 'Event date is invalid' }),
-  location: z.string().min(3, {
-    message: 'Location is Required',
-  }),
-  status: z.string().min(3, {
-    message: 'Status is Required',
-  }),
+  title: z.string().min(3),
+  category: z.string().min(3),
+  desc: z.string().min(10),
+  date: z.coerce.date(),
+  location: z.string().min(3),
+  status: z.string().min(3),
 })
 
-function NewEvent() {
+const locationChoices = [
+  {
+    title: 'Recommend',
+    value: 'recommend',
+  },
+  {
+    title: 'No thanks',
+    value: 'no',
+  },
+]
+
+const NewEvent = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const [locPref, setLocPref] = useState('no')
 
   const form = useForm({
     resolver: zodResolver(eventSchema),
@@ -65,20 +77,27 @@ function NewEvent() {
         date: convertDate,
         location: data.location,
       })
-
-      queryClient.invalidateQueries(['events'])
-      setTimeout(() => {
-        navigate('/events/', { replace: true })
-      }, 1000)
     } catch (error) {
       const message = error?.response?.data?.error
       form.setError('root', { message: message })
     }
   }
 
+  const { mutateAsync: CreateNewEvent } = useMutation({
+    mutationFn: onSubmit,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] })
+      navigate('/events/', { replace: true })
+    },
+  })
+
+  const handlePlaceSelect = (address) => {
+    form.setValue('location', address)
+  }
+
   return (
-    <div className="relative overflow-hidden">
-      <section className="mx-auto mt-4 min-h-[90vh] max-w-screen-2xl md:px-14 xl:px-20">
+    <div className="relative overflow-hidden bg-grid-black/[0.035]">
+      <section className="mx-auto mt-12 min-h-[90vh] max-w-screen-2xl md:px-14 xl:px-20">
         <div className="relative flex min-h-screen items-center justify-center p-6 py-12">
           <GradientBg />
           <Card className="z-10 grid w-full gap-6 bg-background lg:w-[750px] lg:px-8 lg:py-4">
@@ -103,7 +122,7 @@ function NewEvent() {
             <CardContent>
               <Form {...form}>
                 <form
-                  onSubmit={form.handleSubmit(onSubmit)}
+                  onSubmit={form.handleSubmit(CreateNewEvent)}
                   className="grid gap-4"
                 >
                   <FormField
@@ -111,10 +130,10 @@ function NewEvent() {
                     name="title"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>Title</FormLabel>
                         <FormControl>
-                          <Input placeholder="Title" {...field} />
+                          <Input placeholder="Date with bebe" {...field} />
                         </FormControl>
-                        <FormError errorField={form.formState.errors.title} />
                       </FormItem>
                     )}
                   />
@@ -123,12 +142,10 @@ function NewEvent() {
                     name="category"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>Category</FormLabel>
                         <FormControl>
-                          <Input placeholder="Category" {...field} />
+                          <Input placeholder="Personal" {...field} />
                         </FormControl>
-                        <FormError
-                          errorField={form.formState.errors.category}
-                        />
                       </FormItem>
                     )}
                   />
@@ -137,10 +154,13 @@ function NewEvent() {
                     name="desc"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>Description</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Description" {...field} />
+                          <Textarea
+                            placeholder="A quality time with my partner in life"
+                            {...field}
+                          />
                         </FormControl>
-                        <FormError errorField={form.formState.errors.desc} />
                       </FormItem>
                     )}
                   />
@@ -149,6 +169,7 @@ function NewEvent() {
                     name="date"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>Date and Time</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Date"
@@ -156,24 +177,72 @@ function NewEvent() {
                             {...field}
                           />
                         </FormControl>
-                        <FormError errorField={form.formState.errors.date} />
                       </FormItem>
                     )}
                   />
+
                   <FormField
                     control={form.control}
                     name="location"
                     render={({ field }) => (
                       <FormItem>
+                        <FormLabel>Place & Location</FormLabel>
                         <FormControl>
-                          <Input placeholder="Location" {...field} />
+                          <Input
+                            placeholder={
+                              locPref == 'no'
+                                ? 'Wolfgang Steakhouse'
+                                : 'Select from the recommendations'
+                            }
+                            disabled={locPref !== 'no'}
+                            {...field}
+                          />
                         </FormControl>
-                        <FormError
-                          errorField={form.formState.errors.location}
-                        />
                       </FormItem>
                     )}
                   />
+
+                  <div className="flex justify-end gap-2">
+                    <Card className="flex gap-2 p-1">
+                      {locationChoices.map((choice) => (
+                        <a
+                          key={choice.title}
+                          onClick={() => setLocPref(choice.value)}
+                          className="relative cursor-pointer p-4 py-2 text-sm"
+                          style={{
+                            transformStyle: 'preserve-3d',
+                          }}
+                        >
+                          <span
+                            className={cn(
+                              'relative z-50 block text-black dark:text-white',
+                              {
+                                'text-white': locPref === choice.value,
+                              }
+                            )}
+                          >
+                            {choice.title}
+                          </span>
+                          {locPref === choice.value && (
+                            <motion.div
+                              layoutId="clickedbutton"
+                              transition={{
+                                type: 'spring',
+                                bounce: 0.25,
+                                duration: 1.25,
+                              }}
+                              className="absolute inset-0 z-10 rounded-md bg-primary dark:bg-zinc-800"
+                            />
+                          )}
+                        </a>
+                      ))}
+                    </Card>
+                  </div>
+
+                  {locPref !== 'no' && (
+                    <Geoapify onSelectPlace={handlePlaceSelect} />
+                  )}
+
                   <FormError errorField={form.formState.errors.root} />
                   <Button
                     type="submit"

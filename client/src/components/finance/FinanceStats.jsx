@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 const FinanceStats = ({ stat }) => {
   return (
@@ -9,7 +10,9 @@ const FinanceStats = ({ stat }) => {
         {stat.icon}
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-primary">{stat.amount}</div>
+        <div className={cn('text-2xl font-bold text-primary', stat.className)}>
+          {stat.amount}
+        </div>
         <p className="mt-[2px] text-xs text-muted-foreground">{stat.status}</p>
       </CardContent>
     </Card>

@@ -207,9 +207,9 @@ export default function Register() {
                 </Button>
               </form>
             </Form>
-            <Button variant="outline" className="mt-2 w-full">
+            {/* <Button variant="outline" className="mt-2 w-full">
               Sign up with Google
-            </Button>
+            </Button> */}
             <div className="mt-4 text-center text-sm">
               Already have an account?{' '}
               <Link to="/signin" className="underline">

@@ -1,61 +1,82 @@
-import Header from '@/components/Header'
-import GradientBg from '@/components/ui/GradientBg'
-import {
-  Activity,
-  ArrowUpRight,
-  CreditCard,
-  DollarSign,
-  ShoppingCart,
-} from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { Link } from 'react-router-dom'
+import { Activity, CreditCard, DollarSign, ShoppingCart } from 'lucide-react'
 import FinanceStats from '@/components/finance/FinanceStats'
 import Manifestations from '@/components/finance/Manifestations'
-
-const STATS = [
-  {
-    title: 'Current Balance',
-    amount: '$45,231.89',
-    status: '+20.1% from last month',
-    icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
-  },
-  {
-    title: 'Total Spendings',
-    amount: '+2350',
-    status: '+180.1% from last month',
-    icon: <ShoppingCart className="h-4 w-4 text-muted-foreground" />,
-  },
-  {
-    title: 'Savings',
-    amount: '+12,234',
-    status: '+19% from last month',
-    icon: <CreditCard className="h-4 w-4 text-muted-foreground" />,
-  },
-  {
-    title: 'Investments',
-    amount: '+573',
-    status: '+201 since last hour',
-    icon: <Activity className="h-4 w-4 text-muted-foreground" />,
-  },
-]
+import Transactions from '@/components/finance/Transactions'
+import { useMemo } from 'react'
+import { useGetAllFinances } from '@/hooks/useFetchFinance'
 
 function Finances() {
+  const { data, isSuccess } = useGetAllFinances()
+
+  // Calculate total amounts using useMemo
+  const { totalIncome, totalExpense, totalSavings } = useMemo(() => {
+    if (!isSuccess || !data) {
+      return {
+        totalIncome: 0,
+        totalExpense: 0,
+        totalSavings: 0,
+      }
+    }
+
+    return data.reduce(
+      (totals, finance) => {
+        const amount = parseFloat(finance.amount)
+        const { type } = finance
+
+        switch (type) {
+          case 'INCOME':
+            totals.totalIncome += amount
+            break
+          case 'EXPENSE':
+            totals.totalExpense += amount
+            break
+          case 'SAVING':
+            totals.totalSavings += amount
+            break
+          default:
+            break
+        }
+
+        return totals
+      },
+      {
+        totalIncome: 0,
+        totalExpense: 0,
+        totalSavings: 0,
+      }
+    )
+  }, [data, isSuccess])
+
+  const currentBal = totalIncome - (totalExpense + totalSavings)
+
+  const STATS = [
+    {
+      title: 'Current Balance',
+      amount: `Php ${currentBal.toFixed(2)}`,
+      status: '+20.1% from last month',
+      icon: <DollarSign className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+      title: 'Total Income',
+      amount: `Php ${totalIncome.toFixed(2)}`,
+      status: '+201 since last hour',
+      icon: <Activity className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+      title: 'Total Spendings',
+      amount: `Php ${totalExpense.toFixed(2)}`,
+      status: '+180.1% from last month',
+      className: 'text-destructive',
+      icon: <ShoppingCart className="h-4 w-4 text-muted-foreground" />,
+    },
+    {
+      title: 'Savings',
+      amount: `Php ${totalSavings.toFixed(2)}`,
+      status: '+19% from last month',
+      icon: <CreditCard className="h-4 w-4 text-muted-foreground" />,
+    },
+  ]
+
   return (
     <div className="relative overflow-hidden bg-grid-black/[0.035]">
       <section className="mx-auto my-4 min-h-[98dvh] max-w-screen-2xl px-8 md:px-14 lg:mb-0 xl:px-20">
@@ -72,146 +93,9 @@ function Finances() {
                 <FinanceStats key={idx} stat={stat} />
               ))}
             </div>
-            <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-              <Card className="xl:col-span-2">
-                <CardHeader className="flex flex-row items-center">
-                  <div className="grid gap-2">
-                    <CardTitle>Transactions</CardTitle>
-                    <CardDescription>
-                      Recent transactions from your store.
-                    </CardDescription>
-                  </div>
-                  <Button asChild size="sm" className="ml-auto gap-1">
-                    <Link href="#">
-                      View All
-                      <ArrowUpRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Customer</TableHead>
-                        <TableHead className="hidden xl:table-column">
-                          Type
-                        </TableHead>
-                        <TableHead className="hidden xl:table-column">
-                          Status
-                        </TableHead>
-                        <TableHead className="hidden xl:table-column">
-                          Date
-                        </TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Liam Johnson</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            liam@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                          2023-06-23
-                        </TableCell>
-                        <TableCell className="text-right">$250.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Olivia Smith</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            olivia@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Refund
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Declined
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                          2023-06-24
-                        </TableCell>
-                        <TableCell className="text-right">$150.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Noah Williams</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            noah@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Subscription
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                          2023-06-25
-                        </TableCell>
-                        <TableCell className="text-right">$350.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Emma Brown</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            emma@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                          2023-06-26
-                        </TableCell>
-                        <TableCell className="text-right">$450.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>
-                          <div className="font-medium">Liam Johnson</div>
-                          <div className="hidden text-sm text-muted-foreground md:inline">
-                            liam@example.com
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          Sale
-                        </TableCell>
-                        <TableCell className="hidden xl:table-column">
-                          <Badge className="text-xs" variant="outline">
-                            Approved
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                          2023-06-27
-                        </TableCell>
-                        <TableCell className="text-right">$550.00</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-
-              <Manifestations />
+            <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
+              <Transactions />
+              {/* <Manifestations /> */}
             </div>
           </div>
         </div>
